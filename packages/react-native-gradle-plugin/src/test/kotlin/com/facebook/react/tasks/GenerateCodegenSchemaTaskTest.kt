@@ -7,10 +7,12 @@
 
 package com.facebook.react.tasks
 
-import com.facebook.react.tests.*
-import com.facebook.react.tests.createProject
+import com.facebook.react.tests.OS
+import com.facebook.react.tests.OsRule
+import com.facebook.react.tests.WithOs
 import com.facebook.react.tests.createTestTask
 import java.io.File
+import org.gradle.api.tasks.*
 import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
@@ -38,41 +40,6 @@ class GenerateCodegenSchemaTaskTest {
     assertEquals(2, task.jsInputFiles.files.size)
     assertEquals(
         setOf(File(jsRootDir, "file.js"), File(jsRootDir, "file.ts")), task.jsInputFiles.files)
-  }
-
-  @Test
-  fun generateCodegenSchema_inputFilesInExcludedPath_areExcluded() {
-    fun File.createFileAndPath() {
-      parentFile.mkdirs()
-      createNewFile()
-    }
-
-    val jsRootDir =
-        tempFolder.newFolder("js").apply {
-          File(this, "afolder/includedfile.js").createFileAndPath()
-          // Those files should be excluded due to their filepath
-          File(this, "afolder/build/generated/source/codegen/anotherfolder/excludedfile.js")
-              .createFileAndPath()
-          File(this, "afolder/build/generated/assets/react/anotherfolder/excludedfile.js")
-              .createFileAndPath()
-          File(this, "afolder/build/generated/res/react/anotherfolder/excludedfile.js")
-              .createFileAndPath()
-          File(this, "afolder/build/generated/sourcemaps/react/anotherfolder/excludedfile.js")
-              .createFileAndPath()
-          File(this, "afolder/build/intermediates/sourcemaps/react/anotherfolder/excludedfile.js")
-              .createFileAndPath()
-        }
-
-    val task = createTestTask<GenerateCodegenSchemaTask> { it.jsRootDir.set(jsRootDir) }
-
-    assertEquals(jsRootDir, task.jsInputFiles.dir)
-    assertEquals(
-        setOf(
-            "**/build/**/*",
-        ),
-        task.jsInputFiles.excludes)
-    assertEquals(1, task.jsInputFiles.files.size)
-    assertEquals(setOf(File(jsRootDir, "afolder/includedfile.js")), task.jsInputFiles.files)
   }
 
   @Test
@@ -122,7 +89,7 @@ class GenerateCodegenSchemaTaskTest {
   }
 
   @Test
-  @WithOs(OS.LINUX)
+  @WithOs(OS.UNIX)
   fun setupCommandLine_willSetupCorrectly() {
     val codegenDir = tempFolder.newFolder("codegen")
     val jsRootDir = tempFolder.newFolder("js")
@@ -133,59 +100,17 @@ class GenerateCodegenSchemaTaskTest {
           it.codegenDir.set(codegenDir)
           it.jsRootDir.set(jsRootDir)
           it.generatedSrcDir.set(outputDir)
-          it.nodeExecutableAndArgs.set(listOf("node", "--verbose"))
+          it.nodeExecutableAndArgs.set(listOf("--verbose"))
         }
 
     task.setupCommandLine()
 
     assertEquals(
         listOf(
-            "node",
             "--verbose",
             File(codegenDir, "lib/cli/combine/combine-js-to-schema-cli.js").toString(),
-            "--platform",
-            "android",
-            "--exclude",
-            "NativeSampleTurboModule",
             File(outputDir, "schema.json").toString(),
             jsRootDir.toString(),
-        ),
-        task.commandLine.toMutableList())
-  }
-
-  @Test
-  @WithOs(OS.WIN)
-  fun setupCommandLine_onWindows_willSetupCorrectly() {
-    val codegenDir = tempFolder.newFolder("codegen")
-    val jsRootDir = tempFolder.newFolder("js")
-    val outputDir = tempFolder.newFolder("output")
-
-    val project = createProject()
-    val task =
-        createTestTask<GenerateCodegenSchemaTask>(project) {
-          it.codegenDir.set(codegenDir)
-          it.jsRootDir.set(jsRootDir)
-          it.generatedSrcDir.set(outputDir)
-          it.nodeExecutableAndArgs.set(listOf("node", "--verbose"))
-        }
-
-    task.setupCommandLine()
-
-    assertEquals(
-        listOf(
-            "cmd",
-            "/c",
-            "node",
-            "--verbose",
-            File(codegenDir, "lib/cli/combine/combine-js-to-schema-cli.js")
-                .relativeTo(project.projectDir)
-                .path,
-            "--platform",
-            "android",
-            "--exclude",
-            "NativeSampleTurboModule",
-            File(outputDir, "schema.json").relativeTo(project.projectDir).path,
-            jsRootDir.relativeTo(project.projectDir).path,
         ),
         task.commandLine.toMutableList())
   }

@@ -8,14 +8,13 @@
  * @format
  */
 
-import type {RNTesterModuleExample} from '../../types/RNTesterTypes';
-
-import RNTConfigurationBlock from '../../components/RNTConfigurationBlock';
 import RNTesterButton from '../../components/RNTesterButton';
-import ToggleNativeDriver from './utils/ToggleNativeDriver';
+import type {RNTesterModuleExample} from '../../types/RNTesterTypes';
+import {Animated, StyleSheet, Text, View} from 'react-native';
 import * as React from 'react';
 import {useEffect} from 'react';
-import {Animated, StyleSheet, Text, View} from 'react-native';
+import ToggleNativeDriver from './utils/ToggleNativeDriver';
+import RNTConfigurationBlock from '../../components/RNTConfigurationBlock';
 
 export default ({
   title: 'Looping Example',

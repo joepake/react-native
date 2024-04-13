@@ -66,12 +66,10 @@ function getImports(
       | 'EdgeInsetsPrimitive'
       | 'ImageSourcePrimitive'
       | 'PointPrimitive'
-      | 'DimensionPrimitive'
       | $TEMPORARY$string<'ColorPrimitive'>
       | $TEMPORARY$string<'EdgeInsetsPrimitive'>
       | $TEMPORARY$string<'ImageSourcePrimitive'>
-      | $TEMPORARY$string<'PointPrimitive'>
-      | $TEMPORARY$string<'DimensionPrimitive'>,
+      | $TEMPORARY$string<'PointPrimitive'>,
   ) {
     switch (name) {
       case 'ColorPrimitive':
@@ -87,15 +85,6 @@ function getImports(
         return;
       case 'EdgeInsetsPrimitive':
         imports.add('import com.facebook.react.bridge.ReadableMap;');
-        return;
-      case 'DimensionPrimitive':
-        if (type === 'delegate') {
-          imports.add(
-            'import com.facebook.react.bridge.DimensionPropConverter;',
-          );
-        } else {
-          imports.add('import com.facebook.yoga.YogaValue;');
-        }
         return;
       default:
         (name: empty);
@@ -117,23 +106,6 @@ function getImports(
     if (typeAnnotation.type === 'ObjectTypeAnnotation') {
       imports.add('import com.facebook.react.bridge.ReadableMap;');
     }
-
-    if (typeAnnotation.type === 'MixedTypeAnnotation') {
-      if (type === 'delegate') {
-        imports.add('import com.facebook.react.bridge.DynamicFromObject;');
-      } else {
-        imports.add('import com.facebook.react.bridge.Dynamic;');
-      }
-    }
-  });
-
-  component.commands.forEach(command => {
-    command.typeAnnotation.params.forEach(param => {
-      const cmdParamType = param.typeAnnotation.type;
-      if (cmdParamType === 'ArrayTypeAnnotation') {
-        imports.add('import com.facebook.react.bridge.ReadableArray;');
-      }
-    });
   });
 
   return imports;

@@ -10,7 +10,6 @@
 
 'use strict';
 import type {RNTesterModuleExample} from '../../types/RNTesterTypes';
-
 import BaseFlatListExample from './BaseFlatListExample';
 import * as React from 'react';
 
@@ -21,7 +20,7 @@ export function FlatList_onEndReached(): React.Node {
       setOutput('onEndReached'),
     onEndReachedThreshold: 0,
   };
-  const ref = React.useRef<any>(null);
+  const ref = React.useRef(null);
 
   const onTest = () => {
     const scrollResponder = ref?.current?.getScrollResponder();
@@ -45,7 +44,7 @@ export default ({
   name: 'onEndReached',
   description:
     'Scroll to end of list or tap Test button to see `onEndReached` triggered.',
-  render: function () {
+  render: function (): React.Element<typeof FlatList_onEndReached> {
     return <FlatList_onEndReached />;
   },
 }: RNTesterModuleExample);

@@ -5,16 +5,16 @@
  * LICENSE file in the root directory of this source tree.
  *
  * @format
- * @flow strict-local
+ * @flow
  */
 
-// adapted from https://github.com/web-platform-tests/wpt/blob/master/pointerevents/pointerevent_pointermove.html
+// adapated from https://github.com/web-platform-tests/wpt/blob/master/pointerevents/pointerevent_pointermove.html
 
 import type {PlatformTestComponentBaseProps} from '../PlatformTest/RNTesterPlatformTestTypes';
 import type {PointerEvent} from 'react-native/Libraries/Types/CoreEventTypes';
 
-import RNTesterPlatformTest from '../PlatformTest/RNTesterPlatformTest';
 import {useTestEventHandler} from './PointerEventSupport';
+import RNTesterPlatformTest from '../PlatformTest/RNTesterPlatformTest';
 import * as React from 'react';
 import {useRef} from 'react';
 import {StyleSheet, View} from 'react-native';
@@ -24,8 +24,8 @@ function PointerEventPointerMoveTestCase(
 ) {
   const {harness} = props;
 
-  const detectedPointerTypesRef = useRef(({}: {[string]: boolean}));
-  const testPointerMove = harness.useAsyncTest('pointermove event received');
+  const detectedPointerTypesRef = useRef({});
+  const testPointerMove = harness.useAsyncTest('pointermove event recieved');
 
   const handlers = useTestEventHandler(
     ['pointerMove'],

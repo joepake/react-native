@@ -13,10 +13,10 @@
 const React = require('react');
 const {View} = require('react-native');
 const {
-  Colors,
-  DebugInstructions,
   Header,
   LearnMoreLinks,
+  Colors,
+  DebugInstructions,
   ReloadInstructions,
 } = require('react-native/Libraries/NewAppScreen');
 

@@ -8,13 +8,12 @@
  * @flow strict-local
  */
 
-import type {RNTesterModuleExample} from '../../types/RNTesterTypes';
-
-import RNTConfigurationBlock from '../../components/RNTConfigurationBlock';
-import RNTesterButton from '../../components/RNTesterButton';
-import ToggleNativeDriver from './utils/ToggleNativeDriver';
 import * as React from 'react';
-import {Animated, StyleSheet, View} from 'react-native';
+import RNTesterButton from '../../components/RNTesterButton';
+import {Animated, View, StyleSheet} from 'react-native';
+import type {RNTesterModuleExample} from '../../types/RNTesterTypes';
+import RNTConfigurationBlock from '../../components/RNTConfigurationBlock';
+import ToggleNativeDriver from './utils/ToggleNativeDriver';
 
 const styles = StyleSheet.create({
   rotatingImage: {

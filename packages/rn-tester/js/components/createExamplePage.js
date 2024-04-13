@@ -10,18 +10,17 @@
 
 'use strict';
 
-import type {RNTesterModule} from '../types/RNTesterTypes';
+const React = require('react');
 
 import RNTesterModuleContainer from './RNTesterModuleContainer';
-
-const React = require('react');
+import type {RNTesterModule} from '../types/RNTesterTypes';
 
 const createExamplePage = function (
   title: ?string,
   exampleModule: RNTesterModule,
 ): React.ComponentType<any> {
   class ExamplePage extends React.Component<{...}> {
-    render(): React.Node {
+    render() {
       return <RNTesterModuleContainer module={exampleModule} />;
     }
   }

@@ -8,34 +8,35 @@
  * @format
  */
 
-import type {RNTesterModuleExample} from '../../types/RNTesterTypes';
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-
-import ScrollViewPressableStickyHeaderExample from './ScrollViewPressableStickyHeaderExample';
-import nullthrows from 'nullthrows';
 import * as React from 'react';
-import {useCallback, useState} from 'react';
+
 import {
   Platform,
-  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
+  TextInput,
+  RefreshControl,
 } from 'react-native';
 
+import nullthrows from 'nullthrows';
+
+import {useState, useCallback} from 'react';
+import type {RNTesterModuleExample} from '../../types/RNTesterTypes';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import ScrollViewPressableStickyHeaderExample from './ScrollViewPressableStickyHeaderExample';
+
 class EnableDisableList extends React.Component<{}, {scrollEnabled: boolean}> {
-  state: {scrollEnabled: boolean} = {
+  state = {
     scrollEnabled: true,
   };
-  render(): React.Node {
+  render() {
     return (
       <View>
         <ScrollView
           automaticallyAdjustContentInsets={false}
-          nestedScrollEnabled
           style={styles.scrollView}
           scrollEnabled={this.state.scrollEnabled}>
           {ITEMS.map(createItemRow)}
@@ -63,26 +64,24 @@ class EnableDisableList extends React.Component<{}, {scrollEnabled: boolean}> {
 let AppendingListItemCount = 6;
 class AppendingList extends React.Component<
   {},
-  {items: Array<React$Element<Class<Item>>>},
+  {items: Array<React.Element<typeof Item>>},
 > {
-  state: {items: Array<React.Element<Class<Item>>>} = {
+  state = {
     items: [...Array(AppendingListItemCount)].map((_, ii) => (
       <Item msg={`Item ${ii}`} />
     )),
   };
-  render(): React.Node {
+  render() {
     return (
       <View>
         <ScrollView
           automaticallyAdjustContentInsets={false}
           maintainVisibleContentPosition={{
-            minIndexForVisible: 0,
+            minIndexForVisible: 1,
             autoscrollToTopThreshold: 10,
           }}
-          nestedScrollEnabled
           style={styles.scrollView}>
           {this.state.items.map(item =>
-            // $FlowFixMe[prop-missing] React.Element internal inspection
             React.cloneElement(item, {key: item.props.msg}),
           )}
         </ScrollView>
@@ -95,7 +94,6 @@ class AppendingList extends React.Component<
           }}
           style={[styles.scrollView, styles.horizontalScrollView]}>
           {this.state.items.map(item =>
-            // $FlowFixMe[prop-missing] React.Element internal inspection
             React.cloneElement(item, {key: item.props.msg, style: null}),
           )}
         </ScrollView>
@@ -173,10 +171,7 @@ class AppendingList extends React.Component<
 
 function CenterContentList(): React.Node {
   return (
-    <ScrollView
-      nestedScrollEnabled
-      style={styles.scrollView}
-      centerContent={true}>
+    <ScrollView style={styles.scrollView} centerContent={true}>
       <Text>This should be in center.</Text>
     </ScrollView>
   );
@@ -193,72 +188,59 @@ function ContentOffsetList(): React.Node {
   );
 }
 
-function ScrollViewScrollToExample(): React.Node {
-  let _scrollView: ?React.ElementRef<typeof ScrollView>;
-  const [scrolledToTop, setScrolledToTop] = useState(false);
-  const textStyle = {color: 'blue', marginBottom: 10, textAlign: 'center'};
-  return (
-    <View>
-      {scrolledToTop ? (
-        <Text style={textStyle}>scrolledToTop invoked</Text>
-      ) : null}
-      <ScrollView
-        accessibilityRole="grid"
-        ref={scrollView => {
-          _scrollView = scrollView;
-        }}
-        automaticallyAdjustContentInsets={false}
-        nestedScrollEnabled
-        onScroll={() => {
-          console.log('onScroll!');
-          setScrolledToTop(false);
-        }}
-        onScrollToTop={() => {
-          setScrolledToTop(true);
-        }}
-        scrollEventThrottle={200}
-        style={styles.scrollView}
-        testID="scroll_vertical">
-        {ITEMS.map(createItemRow)}
-      </ScrollView>
-      <Button
-        label="Scroll to top"
-        onPress={() => {
-          nullthrows<$FlowFixMe>(_scrollView).scrollTo({y: 0});
-        }}
-        testID="scroll_to_top_button"
-      />
-      <Button
-        label="Scroll to bottom"
-        onPress={() => {
-          nullthrows<$FlowFixMe>(_scrollView).scrollToEnd({animated: true});
-        }}
-        testID="scroll_to_bottom_button"
-      />
-      <Button
-        label="Flash scroll indicators"
-        onPress={() => {
-          nullthrows<$FlowFixMe>(_scrollView).flashScrollIndicators();
-        }}
-        testID="flash_scroll_indicators_button"
-      />
-    </View>
-  );
-}
-
 exports.displayName = 'ScrollViewExample';
 exports.title = 'ScrollView';
 exports.documentationURL = 'https://reactnative.dev/docs/scrollview';
 exports.category = 'Basic';
 exports.description =
   'Component that enables scrolling through child components';
-const examples: Array<RNTesterModuleExample> = [
+const examples = ([
   {
     name: 'scrollTo',
     title: '<ScrollView>\n',
     description:
       'To make content scrollable, wrap it within a <ScrollView> component',
-    render: ScrollViewScrollToExample,
+    render: function (): React.Node {
+      let _scrollView: ?React.ElementRef<typeof ScrollView>;
+      return (
+        <View>
+          <ScrollView
+            ref={scrollView => {
+              _scrollView = scrollView;
+            }}
+            automaticallyAdjustContentInsets={false}
+            onScroll={() => {
+              console.log('onScroll!');
+            }}
+            scrollEventThrottle={200}
+            style={styles.scrollView}
+            testID="scroll_vertical">
+            {ITEMS.map(createItemRow)}
+          </ScrollView>
+          <Button
+            label="Scroll to top"
+            onPress={() => {
+              nullthrows(_scrollView).scrollTo({y: 0});
+            }}
+            testID="scroll_to_top_button"
+          />
+          <Button
+            label="Scroll to bottom"
+            onPress={() => {
+              nullthrows(_scrollView).scrollToEnd({animated: true});
+            }}
+            testID="scroll_to_bottom_button"
+          />
+          <Button
+            label="Flash scroll indicators"
+            onPress={() => {
+              nullthrows(_scrollView).flashScrollIndicators();
+            }}
+            testID="flash_scroll_indicators_button"
+          />
+        </View>
+      );
+    },
   },
   {
     name: 'horizontalScrollTo',
@@ -335,7 +317,7 @@ const examples: Array<RNTesterModuleExample> = [
     },
   },
   {
-    name: 'pressableStickyHeader',
+    name: 'pressableStickyHeaders',
     title: '<ScrollView> Pressable Sticky Header\n',
     description:
       'Press the blue box to toggle it between blue and yellow. The box should remain Pressable after scrolling.',
@@ -416,7 +398,10 @@ const examples: Array<RNTesterModuleExample> = [
       return <ContentOffsetList />;
     },
   },
-  {
+]: Array<RNTesterModuleExample>);
+
+if (Platform.OS === 'ios') {
+  examples.push({
     title: '<ScrollView> smooth bi-directional content loading\n',
     description:
       'The `maintainVisibleContentPosition` prop allows insertions to either end of the content ' +
@@ -424,10 +409,7 @@ const examples: Array<RNTesterModuleExample> = [
     render: function () {
       return <AppendingList />;
     },
-  },
-];
-
-if (Platform.OS === 'ios') {
+  });
   examples.push({
     title: '<ScrollView> (centerContent = true)\n',
     description:
@@ -510,7 +492,6 @@ const AndroidScrollBarOptions = () => {
     <View>
       <ScrollView
         style={[styles.scrollView, {height: 200}]}
-        nestedScrollEnabled
         persistentScrollbar={persistentScrollBar}>
         {ITEMS.map(createItemRow)}
       </ScrollView>
@@ -529,7 +510,6 @@ const HorizontalScrollView = (props: {direction: 'ltr' | 'rtl'}) => {
   return (
     <View style={{direction}}>
       <Text style={styles.text}>{title}</Text>
-      {/* $FlowFixMe[incompatible-use] */}
       <ScrollView
         ref={scrollRef}
         automaticallyAdjustContentInsets={false}
@@ -541,16 +521,14 @@ const HorizontalScrollView = (props: {direction: 'ltr' | 'rtl'}) => {
       <Button
         label="Scroll to start"
         onPress={() => {
-          nullthrows<$FlowFixMe>(scrollRef.current).scrollTo({x: 0});
+          nullthrows(scrollRef.current).scrollTo({x: 0});
         }}
         testID={'scroll_to_start_button'}
       />
       <Button
         label="Scroll to end"
         onPress={() => {
-          nullthrows<$FlowFixMe>(scrollRef.current).scrollToEnd({
-            animated: true,
-          });
+          nullthrows(scrollRef.current).scrollToEnd({animated: true});
         }}
         testID={'scroll_to_end_button'}
       />
@@ -591,7 +569,7 @@ const SnapToOptions = () => {
   const snapToAlignmentModes = ['start', 'center', 'end'];
   const [snapToEnd, setSnapToEnd] = useState(true);
   const [snapToInterval, setSnapToInterval] = useState(0);
-  const [snapToOffsets, setSnapToOffsets] = useState<Array<number>>([]);
+  const [snapToOffsets, setSnapToOffsets] = useState([]);
   const [snapToStart, setSnapToStart] = useState(true);
 
   return (
@@ -676,15 +654,10 @@ const ScrollToOptions = () => {
 };
 
 const ScrollIndicatorExample = () => {
-  const [scrollIndicatorInsets, setScrollIndicatorInsets] = useState<null | {
-    bottom: number,
-    left: number,
-    right: number,
-    top: number,
-  }>(null);
+  const [scrollIndicatorInsets, setScrollIndicatorInsets] = useState(null);
   const [showsHorizontalScrollIndic, setShowsHorizontalScrollIndic] =
     useState(true);
-  const [showsVerticalScrollIndic, setShowsVerticalScrollIndic] =
+  const [showsVerticallScrollIndic, setShowsVerticalScrollIndic] =
     useState(true);
   return (
     <View>
@@ -693,7 +666,7 @@ const ScrollIndicatorExample = () => {
         contentInset={{top: 10, bottom: 10, left: 10, right: 10}}
         scrollIndicatorInsets={scrollIndicatorInsets}
         showsHorizontalScrollIndicator={showsHorizontalScrollIndic}
-        showsVerticalScrollIndicator={showsVerticalScrollIndic}
+        showsVerticalScrollIndicator={showsVerticallScrollIndic}
         nestedScrollEnabled>
         {ITEMS.map(createItemRow)}
       </ScrollView>
@@ -725,9 +698,10 @@ const ScrollIndicatorExample = () => {
       />
       <Button
         label={
-          'showsVerticalScrollIndicator: ' + showsVerticalScrollIndic.toString()
+          'showsVerticalScrollIndicator: ' +
+          showsVerticallScrollIndic.toString()
         }
-        onPress={() => setShowsVerticalScrollIndic(!showsVerticalScrollIndic)}
+        onPress={() => setShowsVerticalScrollIndic(!showsVerticallScrollIndic)}
       />
     </View>
   );
@@ -755,7 +729,6 @@ const RefreshControlExample = () => {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    // $FlowFixMe[unused-promise]
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
@@ -960,7 +933,6 @@ const InvertStickyHeaders = () => {
   const _scrollView = React.useRef<?React.ElementRef<typeof ScrollView>>(null);
   return (
     <View>
-      {/* $FlowFixMe[incompatible-use] */}
       <ScrollView
         ref={_scrollView}
         style={[styles.scrollView, {height: 200}]}
@@ -979,16 +951,14 @@ const InvertStickyHeaders = () => {
         <Button
           label="Scroll to top"
           onPress={() => {
-            nullthrows<$FlowFixMe>(_scrollView.current).scrollTo({y: 0});
+            nullthrows(_scrollView.current).scrollTo({y: 0});
           }}
           testID="scroll_to_top_button"
         />
         <Button
           label="Scroll to bottom"
           onPress={() => {
-            nullthrows<$FlowFixMe>(_scrollView.current).scrollToEnd({
-              animated: true,
-            });
+            nullthrows(_scrollView.current).scrollToEnd({animated: true});
           }}
           testID="scroll_to_bottom_button"
         />
@@ -1002,7 +972,6 @@ const MultipleStickyHeaders = () => {
   const stickyHeaderStyle = {backgroundColor: 'yellow'};
   return (
     <View>
-      {/* $FlowFixMe[incompatible-use] */}
       <ScrollView
         ref={_scrollView}
         style={[styles.scrollView, {height: 200}]}
@@ -1020,16 +989,14 @@ const MultipleStickyHeaders = () => {
         <Button
           label="Scroll to top"
           onPress={() => {
-            nullthrows<$FlowFixMe>(_scrollView.current).scrollTo({y: 0});
+            nullthrows(_scrollView.current).scrollTo({y: 0});
           }}
           testID="scroll_to_top_button"
         />
         <Button
           label="Scroll to bottom"
           onPress={() => {
-            nullthrows<$FlowFixMe>(_scrollView.current).scrollToEnd({
-              animated: true,
-            });
+            nullthrows(_scrollView.current).scrollToEnd({animated: true});
           }}
           testID="scroll_to_bottom_button"
         />
@@ -1134,15 +1101,8 @@ const DecelerationRateExample = () => {
 
 const ContentExample = () => {
   const [canCancelContentTouches, setCanCancelContentTouches] = useState(false);
-  const [contentInset, setContentInset] = useState<null | {
-    bottom: number,
-    left: number,
-    right: number,
-    top: number,
-  }>(null);
-  const [contentContainerStyle, setContentContainerStyle] = useState<null | {
-    backgroundColor: string,
-  }>(null);
+  const [contentInset, setContentInset] = useState(null);
+  const [contentContainerStyle, setContentContainerStyle] = useState(null);
   const [contentInsetAdjustmentBehavior, setContentInsetAdjustmentBehavior] =
     useState('never');
   return (
@@ -1243,7 +1203,8 @@ const BouncesExampleHorizontal = () => {
         style={[styles.scrollView, {height: 200}]}
         horizontal={true}
         alwaysBounceHorizontal={bounce}
-        contentOffset={{x: 100, y: 0}}>
+        contentOffset={{x: 100, y: 0}}
+        nestedScrollEnabled>
         {ITEMS.map(createItemRow)}
       </ScrollView>
       <View>
@@ -1281,7 +1242,7 @@ class Item extends React.PureComponent<{|
   msg?: string,
   style?: ViewStyleProp,
 |}> {
-  render(): $FlowFixMe {
+  render() {
     return (
       <View style={[styles.item, this.props.style]}>
         <Text>{this.props.msg}</Text>

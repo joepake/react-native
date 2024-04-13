@@ -5,18 +5,18 @@
  * LICENSE file in the root directory of this source tree.
  *
  * @format
- * @flow strict-local
+ * @flow
  */
 
 'use strict';
 
+import Scrollable from './SectionList-scrollable';
 import ContentInset from './SectionList-contentInset';
-import inverted from './SectionList-inverted';
 import onEndReached from './SectionList-onEndReached';
 import onViewableItemsChanged from './SectionList-onViewableItemsChanged';
-import Scrollable from './SectionList-scrollable';
-import stickyHeadersEnabled from './SectionList-stickyHeadersEnabled';
 import withSeparators from './SectionList-withSeparators';
+import stickyHeadersEnabled from './SectionList-stickyHeadersEnabled';
+import inverted from './SectionList-inverted';
 
 exports.title = 'SectionList';
 exports.category = 'ListView';

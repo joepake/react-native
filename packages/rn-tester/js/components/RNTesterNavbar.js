@@ -5,14 +5,51 @@
  * LICENSE file in the root directory of this source tree.
  *
  * @format
- * @flow strict-local
+ * @flow
  */
 
 import type {RNTesterTheme} from './RNTesterTheme';
 
-import {RNTesterThemeContext} from './RNTesterTheme';
 import * as React from 'react';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Text, View, StyleSheet, Image, Pressable} from 'react-native';
+
+import {RNTesterThemeContext} from './RNTesterTheme';
+
+const BookmarkTab = ({
+  handleNavBarPress,
+  isBookmarkActive,
+  theme,
+}: $TEMPORARY$object<{
+  handleNavBarPress: (data: {screen: string}) => void,
+  isBookmarkActive: boolean,
+  theme: RNTesterTheme,
+}>) => (
+  <View style={styles.centerBox}>
+    <View
+      style={[
+        styles.centralBoxCutout,
+        {backgroundColor: theme.BackgroundColor},
+      ]}
+    />
+    <View style={styles.floatContainer}>
+      <Pressable
+        testID="bookmarks-tab"
+        onPress={() => handleNavBarPress({screen: 'bookmarks'})}>
+        <View
+          style={[styles.floatingButton, {backgroundColor: theme.BorderColor}]}>
+          <Image
+            style={styles.bookmarkIcon}
+            source={
+              isBookmarkActive
+                ? require('../assets/bottom-nav-bookmark-fill.png')
+                : require('../assets/bottom-nav-bookmark-outline.png')
+            }
+          />
+        </View>
+      </Pressable>
+    </View>
+  </View>
+);
 
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
@@ -37,12 +74,7 @@ const NavbarButton = ({
         style={iconStyle}
         source={isActive ? activeImage : inactiveImage}
       />
-      <Text
-        style={{
-          color: isActive
-            ? theme.NavBarLabelActiveColor
-            : theme.NavBarLabelInactiveColor,
-        }}>
+      <Text style={isActive ? styles.activeText : styles.inactiveText}>
         {label}
       </Text>
     </View>
@@ -62,8 +94,8 @@ const ComponentTab = ({
     testID="components-tab"
     label="Components"
     handlePress={() => handleNavBarPress({screen: 'components'})}
-    activeImage={theme.NavBarComponentsActiveIcon}
-    inactiveImage={theme.NavBarComponentsInactiveIcon}
+    activeImage={require('./../assets/bottom-nav-components-icon-active.png')}
+    inactiveImage={require('./../assets/bottom-nav-components-icon-inactive.png')}
     isActive={isComponentActive}
     theme={theme}
     iconStyle={styles.componentIcon}
@@ -83,8 +115,8 @@ const APITab = ({
     testID="apis-tab"
     label="APIs"
     handlePress={() => handleNavBarPress({screen: 'apis'})}
-    activeImage={theme.NavBarAPIsActiveIcon}
-    inactiveImage={theme.NavBarAPIsInactiveIcon}
+    activeImage={require('./../assets/bottom-nav-apis-icon-active.png')}
+    inactiveImage={require('./../assets/bottom-nav-apis-icon-inactive.png')}
     isActive={isAPIActive}
     theme={theme}
     iconStyle={styles.apiIcon}
@@ -106,12 +138,18 @@ const RNTesterNavbar = ({
 
   const isAPIActive = screen === 'apis' && !isExamplePageOpen;
   const isComponentActive = screen === 'components' && !isExamplePageOpen;
+  const isBookmarkActive = screen === 'bookmarks' && !isExamplePageOpen;
 
   return (
     <View>
       <View style={styles.buttonContainer}>
         <ComponentTab
           isComponentActive={isComponentActive}
+          handleNavBarPress={handleNavBarPress}
+          theme={theme}
+        />
+        <BookmarkTab
+          isBookmarkActive={isBookmarkActive}
           handleNavBarPress={handleNavBarPress}
           theme={theme}
         />
@@ -152,6 +190,11 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 5,
   },
+  bookmarkIcon: {
+    width: 30,
+    height: 30,
+    margin: 10,
+  },
   componentIcon: {
     width: 20,
     height: 20,
@@ -161,6 +204,12 @@ const styles = StyleSheet.create({
     width: 30,
     height: 20,
     alignSelf: 'center',
+  },
+  activeText: {
+    color: '#5E5F62',
+  },
+  inactiveText: {
+    color: '#B1B4BA',
   },
   activeBar: {
     borderTopWidth: 2,

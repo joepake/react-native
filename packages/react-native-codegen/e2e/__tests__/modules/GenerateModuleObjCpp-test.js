@@ -4,22 +4,20 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
+ * @emails oncall+react_native
  * @flow strict-local
  * @format
- * @oncall react_native
  */
 
 'use strict';
 
-import type {SchemaType} from '../../../src/CodegenSchema';
-
+const parser = require('../../../src/parsers/flow');
 const generator = require('../../../src/generators/modules/GenerateModuleObjCpp');
-const {FlowParser} = require('../../../src/parsers/flow/parser');
 const fs = require('fs');
 
-const FIXTURE_DIR = `${__dirname}/../../__test_fixtures__/modules`;
+import type {SchemaType} from '../../../src/CodegenSchema';
 
-const parser = new FlowParser();
+const FIXTURE_DIR = `${__dirname}/../../__test_fixtures__/modules`;
 
 function getModules(): SchemaType {
   const filenames: Array<string> = fs.readdirSync(FIXTURE_DIR);

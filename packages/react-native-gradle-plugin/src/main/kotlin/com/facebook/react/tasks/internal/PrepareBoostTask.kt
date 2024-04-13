@@ -32,6 +32,7 @@ abstract class PrepareBoostTask : DefaultTask() {
       it.from(boostPath)
       it.from(project.file("src/main/jni/third-party/boost"))
       it.include(
+          "Android.mk",
           "CMakeLists.txt",
           "boost_${boostVersion.get()}/boost/**/*.hpp",
           "boost/boost/**/*.hpp",
@@ -40,7 +41,7 @@ abstract class PrepareBoostTask : DefaultTask() {
       it.into(outputDir)
     }
     File(outputDir.asFile.get(), "boost").apply {
-      renameTo(File(parentFile, "boost_${boostVersion.get()}"))
+      renameTo(File(this.parentFile, "boost_${boostVersion.get()}"))
     }
   }
 }

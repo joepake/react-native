@@ -21,16 +21,15 @@
   UIGraphicsImageRenderer *const renderer = [[UIGraphicsImageRenderer alloc] initWithSize:imageSize
                                                                                    format:rendererFormat];
 
-  return [renderer imageWithActions:^(UIGraphicsImageRendererContext *_Nonnull rendererContext) {
-    const CGContextRef context = rendererContext.CGContext;
+  return [renderer imageWithActions:^(UIGraphicsImageRendererContext *_Nonnull context) {
     [self drawInRect:CGRectMake(0, 0, self.size.width, self.size.height)];
-    CGContextSetAlpha(context, 0.5f);
-    CGContextBeginTransparencyLayer(context, NULL);
+    CGContextSetAlpha(context.CGContext, 0.5f);
+    CGContextBeginTransparencyLayer(context.CGContext, NULL);
     [image drawInRect:CGRectMake(0, 0, image.size.width, image.size.height)];
-    CGContextSetBlendMode(context, kCGBlendModeDifference);
-    CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
-    CGContextFillRect(context, CGRectMake(0, 0, self.size.width, self.size.height));
-    CGContextEndTransparencyLayer(context);
+    CGContextSetBlendMode(context.CGContext, kCGBlendModeDifference);
+    CGContextSetFillColorWithColor(context.CGContext, [UIColor whiteColor].CGColor);
+    CGContextFillRect(context.CGContext, CGRectMake(0, 0, self.size.width, self.size.height));
+    CGContextEndTransparencyLayer(context.CGContext);
   }];
 }
 

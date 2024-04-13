@@ -8,20 +8,19 @@
  * @flow
  */
 
-import type {SectionData} from '../types/RNTesterTypes';
-
-import {RNTesterThemeContext} from './RNTesterTheme';
-
-const RNTesterListFilters = require('./RNTesterListFilters');
 const React = require('react');
+const RNTesterListFilters = require('./RNTesterListFilters');
 const {
-  Image,
-  Platform,
-  ScrollView,
   StyleSheet,
   TextInput,
   View,
+  ScrollView,
+  Image,
+  Platform,
 } = require('react-native');
+import {RNTesterThemeContext} from './RNTesterTheme';
+
+import type {SectionData} from '../types/RNTesterTypes';
 
 type Props<T> = {
   filter: Function,
@@ -29,7 +28,7 @@ type Props<T> = {
   disableSearch?: boolean,
   testID?: string,
   hideFilterPills?: boolean,
-  page: 'examples_page' | 'components_page',
+  page: 'examples_page' | 'components_page' | 'bookmarks_page',
   sections: $ReadOnlyArray<SectionData<T>>,
   ...
 };
@@ -81,18 +80,21 @@ class RNTesterExampleFilter<T> extends React.Component<Props<T>, State> {
   }
 
   _renderFilteredSections(
-    filteredSections: $ReadOnlyArray<{
-      data: Array<T>,
-      key: string,
-      title: string,
-    }>,
-  ): React.Node {
+    filteredSections: Array<
+      $TEMPORARY$object<{data: Array<T>, key: string, title: string}>,
+    >,
+  ): ?React.Element<any> {
     if (this.props.page === 'examples_page') {
       return (
         <ScrollView
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="interactive">
           {this.props.render({filteredSections})}
+          {/**
+           * This is a fake list item. It is needed to provide the ScrollView some bottom padding.
+           * The height of this item is basically ScreenHeight - the height of (Header + bottom navbar)
+           * */}
+          <View style={{height: 350}} />
         </ScrollView>
       );
     } else {

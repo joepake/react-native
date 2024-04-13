@@ -8,17 +8,17 @@
  * @flow
  */
 
-import RNTesterDocumentationURL from './RNTesterDocumentationURL';
-import {type RNTesterTheme} from './RNTesterTheme';
-import * as React from 'react';
 import {
-  Button,
-  Platform,
-  SafeAreaView,
-  StyleSheet,
   Text,
   View,
+  SafeAreaView,
+  Button,
+  Platform,
+  StyleSheet,
 } from 'react-native';
+import * as React from 'react';
+import RNTesterDocumentationURL from './RNTesterDocumentationURL';
+import {type RNTesterTheme} from './RNTesterTheme';
 
 const HeaderIOS = ({
   onBack,

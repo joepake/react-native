@@ -10,9 +10,10 @@
 
 'use strict';
 
-const {RNTesterThemeContext} = require('../../components/RNTesterTheme');
 const React = require('react');
-const {Alert, Button, StyleSheet, View} = require('react-native');
+
+const {Alert, Button, View, StyleSheet} = require('react-native');
+const {RNTesterThemeContext} = require('../../components/RNTesterTheme');
 
 function onButtonPress(buttonName: string) {
   Alert.alert(`Your application has been ${buttonName}!`);
@@ -168,28 +169,6 @@ exports.examples = [
                 color={theme.LinkColor}
                 title="Submit Application"
                 accessibilityLabel="Press to submit your application!"
-              />
-            );
-          }}
-        </RNTesterThemeContext.Consumer>
-      );
-    },
-  },
-  {
-    title: 'Button with aria-label="label"',
-    description: ('Note: This prop changes the text that a screen ' +
-      'reader announces (there are no visual differences).': string),
-    render: function (): React.Node {
-      return (
-        <RNTesterThemeContext.Consumer>
-          {theme => {
-            return (
-              <Button
-                onPress={() => onButtonPress('submitted')}
-                testID="aria_label_button"
-                color={theme.LinkColor}
-                title="Submit Application"
-                aria-label="Press to submit your application!"
               />
             );
           }}

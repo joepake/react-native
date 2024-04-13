@@ -11,7 +11,8 @@
 'use strict';
 
 const React = require('react');
-const {Platform, StyleSheet, Text, TextInput, View} = require('react-native');
+
+const {StyleSheet, Text, TextInput, View, Platform} = require('react-native');
 
 class XHRExampleFetch extends React.Component<any, any> {
   responseURL: ?string;
@@ -27,7 +28,6 @@ class XHRExampleFetch extends React.Component<any, any> {
   }
 
   submit(uri: string) {
-    // $FlowFixMe[unused-promise]
     fetch(uri)
       .then(response => {
         this.responseURL = response.url;
@@ -39,12 +39,12 @@ class XHRExampleFetch extends React.Component<any, any> {
       });
   }
 
-  _renderHeaders(): null | Array<React.Node> {
+  _renderHeaders() {
     if (!this.responseHeaders) {
       return null;
     }
 
-    const responseHeaders: Array<React.Node> = [];
+    const responseHeaders = [];
     const keys = Object.keys(this.responseHeaders.map);
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];

@@ -10,17 +10,14 @@
 
 'use strict';
 
+const {getSafePropertyName, getNamespacedStructName} = require('../Utils');
+const {capitalize} = require('../../../Utils');
+
 import type {Nullable} from '../../../../CodegenSchema';
-import type {RegularStruct, StructTypeAnnotation} from '../StructCollector';
+import type {StructTypeAnnotation, RegularStruct} from '../StructCollector';
 import type {StructSerilizationOutput} from './serializeStruct';
 
-const {unwrapNullable} = require('../../../../parsers/parsers-commons');
-const {wrapOptional: wrapCxxOptional} = require('../../../TypeUtils/Cxx');
-const {
-  wrapOptional: wrapObjCOptional,
-} = require('../../../TypeUtils/Objective-C');
-const {capitalize} = require('../../../Utils');
-const {getNamespacedStructName, getSafePropertyName} = require('../Utils');
+const {unwrapNullable} = require('../../../../parsers/flow/modules/utils');
 
 const StructTemplate = ({
   hasteModuleName,
@@ -73,12 +70,15 @@ function toObjCType(
 ): string {
   const [typeAnnotation, nullable] = unwrapNullable(nullableTypeAnnotation);
   const isRequired = !nullable && !isOptional;
+  const wrapOptional = (type: string) => {
+    return isRequired ? type : `std::optional<${type}>`;
+  };
 
   switch (typeAnnotation.type) {
     case 'ReservedTypeAnnotation':
       switch (typeAnnotation.name) {
         case 'RootTag':
-          return wrapCxxOptional('double', isRequired);
+          return wrapOptional('double');
         default:
           (typeAnnotation.name: empty);
           throw new Error(`Unknown prop type, found: ${typeAnnotation.name}"`);
@@ -86,38 +86,26 @@ function toObjCType(
     case 'StringTypeAnnotation':
       return 'NSString *';
     case 'NumberTypeAnnotation':
-      return wrapCxxOptional('double', isRequired);
+      return wrapOptional('double');
     case 'FloatTypeAnnotation':
-      return wrapCxxOptional('double', isRequired);
+      return wrapOptional('double');
     case 'Int32TypeAnnotation':
-      return wrapCxxOptional('double', isRequired);
+      return wrapOptional('double');
     case 'DoubleTypeAnnotation':
-      return wrapCxxOptional('double', isRequired);
+      return wrapOptional('double');
     case 'BooleanTypeAnnotation':
-      return wrapCxxOptional('bool', isRequired);
-    case 'EnumDeclaration':
-      switch (typeAnnotation.memberType) {
-        case 'NumberTypeAnnotation':
-          return wrapCxxOptional('double', isRequired);
-        case 'StringTypeAnnotation':
-          return 'NSString *';
-        default:
-          throw new Error(
-            `Couldn't convert enum into ObjC type: ${typeAnnotation.type}"`,
-          );
-      }
+      return wrapOptional('bool');
     case 'GenericObjectTypeAnnotation':
-      return wrapObjCOptional('id<NSObject>', isRequired);
+      return isRequired ? 'id<NSObject> ' : 'id<NSObject> _Nullable';
     case 'ArrayTypeAnnotation':
       if (typeAnnotation.elementType == null) {
-        return wrapObjCOptional('id<NSObject>', isRequired);
+        return isRequired ? 'id<NSObject> ' : 'id<NSObject> _Nullable';
       }
-      return wrapCxxOptional(
+      return wrapOptional(
         `facebook::react::LazyVector<${toObjCType(
           hasteModuleName,
           typeAnnotation.elementType,
         )}>`,
-        isRequired,
       );
     case 'TypeAliasTypeAnnotation':
       const structName = capitalize(typeAnnotation.name);
@@ -125,7 +113,7 @@ function toObjCType(
         hasteModuleName,
         structName,
       );
-      return wrapCxxOptional(namespacedStructName, isRequired);
+      return wrapOptional(namespacedStructName);
     default:
       (typeAnnotation.type: empty);
       throw new Error(
@@ -173,17 +161,6 @@ function toObjCValue(
       return RCTBridgingTo('Double');
     case 'BooleanTypeAnnotation':
       return RCTBridgingTo('Bool');
-    case 'EnumDeclaration':
-      switch (typeAnnotation.memberType) {
-        case 'NumberTypeAnnotation':
-          return RCTBridgingTo('Double');
-        case 'StringTypeAnnotation':
-          return RCTBridgingTo('String');
-        default:
-          throw new Error(
-            `Couldn't convert enum into ObjC value: ${typeAnnotation.type}"`,
-          );
-      }
     case 'GenericObjectTypeAnnotation':
       return value;
     case 'ArrayTypeAnnotation':

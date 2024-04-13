@@ -11,13 +11,14 @@
 'use strict';
 
 const React = require('react');
+
 const {
-  Platform,
   StyleSheet,
+  View,
   Text,
   TouchableHighlight,
   Vibration,
-  View,
+  Platform,
 } = require('react-native');
 
 exports.framework = 'React';

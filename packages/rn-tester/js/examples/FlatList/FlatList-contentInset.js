@@ -9,10 +9,10 @@
  */
 
 import type {RNTesterModuleExample} from '../../types/RNTesterTypes';
-
-import BaseFlatListExample from './BaseFlatListExample';
-import * as React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import BaseFlatListExample from './BaseFlatListExample';
+
+import * as React from 'react';
 
 export function FlatList_contentInset(): React.Node {
   const [initialContentInset, toggledContentInset] = [44, 88];

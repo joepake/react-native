@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  * @format
- * @flow strict-local
+ * @flow
  */
 
 'use strict';
@@ -38,7 +38,7 @@ export function SectionList_inverted(): React.Node {
 export default {
   title: 'SectionList Inverted',
   name: 'SectionList-inverted',
-  render: function (): React.MixedElement {
+  render: function (): React.Element<typeof SectionList_inverted> {
     return <SectionList_inverted />;
   },
 };

@@ -8,21 +8,16 @@
  * @flow
  */
 
-import {type EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
-
 const React = require('react');
+
 const {DeviceEventEmitter, Text, View} = require('react-native');
+
+import {type EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
 
 class OrientationChangeExample extends React.Component<{...}, $FlowFixMeState> {
   _orientationSubscription: EventSubscription;
 
-  state:
-    | any
-    | {
-        currentOrientation: string,
-        isLandscape: boolean,
-        orientationDegrees: number,
-      } = {
+  state = {
     currentOrientation: '',
     orientationDegrees: 0,
     isLandscape: false,
@@ -47,7 +42,7 @@ class OrientationChangeExample extends React.Component<{...}, $FlowFixMeState> {
     });
   };
 
-  render(): React.Node {
+  render() {
     return (
       <View>
         <Text>{JSON.stringify(this.state)}</Text>

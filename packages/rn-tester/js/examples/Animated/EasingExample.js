@@ -9,18 +9,17 @@
  */
 
 import type {RNTesterModuleExample} from '../../types/RNTesterTypes';
-
-import RNTConfigurationBlock from '../../components/RNTConfigurationBlock';
+import * as React from 'react';
 import RNTesterButton from '../../components/RNTesterButton';
 import ToggleNativeDriver from './utils/ToggleNativeDriver';
-import * as React from 'react';
+import RNTConfigurationBlock from '../../components/RNTConfigurationBlock';
 import {
-  Animated,
-  Easing,
-  SectionList,
-  StyleSheet,
   Text,
+  StyleSheet,
   View,
+  Animated,
+  SectionList,
+  Easing,
 } from 'react-native';
 
 type Props = $ReadOnly<{||}>;
@@ -136,7 +135,7 @@ function EasingExample(props: Props): React.Node {
       <SectionList
         sections={easingSections}
         renderItem={info => {
-          const item: EasingListItem = info.item;
+          const item = (info.item: EasingListItem);
 
           return (
             <EasingItem

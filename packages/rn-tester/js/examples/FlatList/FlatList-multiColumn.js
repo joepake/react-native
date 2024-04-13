@@ -10,9 +10,12 @@
 
 'use strict';
 
-import type {Item} from '../../components/ListExampleShared';
-import type {RNTesterModuleExample} from '../../types/RNTesterTypes';
 import type {RenderItemProps} from 'react-native/Libraries/Lists/VirtualizedList';
+import type {RNTesterModuleExample} from '../../types/RNTesterTypes';
+const RNTesterPage = require('../../components/RNTesterPage');
+const React = require('react');
+
+const infoLog = require('react-native/Libraries/Utilities/infoLog');
 
 const {
   FooterComponent,
@@ -20,15 +23,14 @@ const {
   ItemComponent,
   PlainInput,
   SeparatorComponent,
-  genNewerItems,
+  genItemData,
   getItemLayout,
   pressItem,
   renderSmallSwitchOption,
 } = require('../../components/ListExampleShared');
-const RNTesterPage = require('../../components/RNTesterPage');
-const React = require('react');
-const {Alert, FlatList, StyleSheet, Text, View} = require('react-native');
-const infoLog = require('react-native/Libraries/Utilities/infoLog');
+const {FlatList, StyleSheet, Text, View, Alert} = require('react-native');
+
+import type {Item} from '../../components/ListExampleShared';
 
 class MultiColumnExample extends React.PureComponent<
   $FlowFixMeProps,
@@ -44,7 +46,7 @@ class MultiColumnExample extends React.PureComponent<
         numColumns: number,
         virtualized: boolean,
       |} = {
-    data: genNewerItems(1000),
+    data: genItemData(1000),
     filterText: '',
     fixedHeight: true,
     logViewable: false,
@@ -71,6 +73,7 @@ class MultiColumnExample extends React.PureComponent<
     return (
       <RNTesterPage
         title={this.props.navigator ? null : '<FlatList> - MultiColumn'}
+        noSpacer={true}
         noScroll={true}>
         <View style={styles.searchRow}>
           <View style={styles.row}>
@@ -139,7 +142,7 @@ class MultiColumnExample extends React.PureComponent<
       getItemLayout(data, index).length + 2 * (CARD_MARGIN + BORDER_WIDTH);
     return {length, offset: length * index, index};
   }
-  _renderItemComponent = ({item}: RenderItemProps<any | Item>): $FlowFixMe => {
+  _renderItemComponent = ({item}: RenderItemProps<any | Item>) => {
     return (
       <View style={styles.card}>
         <ItemComponent

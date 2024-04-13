@@ -11,28 +11,28 @@
 'use strict';
 
 import type {
-  NativeModuleArrayTypeAnnotation,
-  NativeModuleBaseTypeAnnotation,
-  NativeModuleBooleanTypeAnnotation,
-  NativeModuleDoubleTypeAnnotation,
-  NativeModuleEnumDeclaration,
-  NativeModuleFloatTypeAnnotation,
-  NativeModuleGenericObjectTypeAnnotation,
-  NativeModuleInt32TypeAnnotation,
-  NativeModuleNumberTypeAnnotation,
+  Nullable,
   NativeModuleObjectTypeAnnotation,
   NativeModuleStringTypeAnnotation,
-  NativeModuleTypeAliasTypeAnnotation,
-  Nullable,
+  NativeModuleNumberTypeAnnotation,
+  NativeModuleInt32TypeAnnotation,
+  NativeModuleDoubleTypeAnnotation,
+  NativeModuleFloatTypeAnnotation,
+  NativeModuleBooleanTypeAnnotation,
+  NativeModuleGenericObjectTypeAnnotation,
   ReservedTypeAnnotation,
+  NativeModuleTypeAliasTypeAnnotation,
+  NativeModuleArrayTypeAnnotation,
+  NativeModuleBaseTypeAnnotation,
 } from '../../../CodegenSchema';
+
 import type {AliasResolver} from '../Utils';
 
+const {capitalize} = require('../../Utils');
 const {
   unwrapNullable,
   wrapNullable,
-} = require('../../../parsers/parsers-commons');
-const {capitalize} = require('../../Utils');
+} = require('../../../parsers/flow/modules/utils');
 
 type StructContext = 'CONSTANTS' | 'REGULAR';
 
@@ -63,7 +63,6 @@ export type StructTypeAnnotation =
   | NativeModuleDoubleTypeAnnotation
   | NativeModuleFloatTypeAnnotation
   | NativeModuleBooleanTypeAnnotation
-  | NativeModuleEnumDeclaration
   | NativeModuleGenericObjectTypeAnnotation
   | ReservedTypeAnnotation
   | NativeModuleTypeAliasTypeAnnotation
@@ -113,12 +112,8 @@ class StructCollector {
         this._insertAlias(typeAnnotation.name, structContext, resolveAlias);
         return wrapNullable(nullable, typeAnnotation);
       }
-      case 'EnumDeclaration':
-        return wrapNullable(nullable, typeAnnotation);
       case 'MixedTypeAnnotation':
         throw new Error('Mixed types are unsupported in structs');
-      case 'UnionTypeAnnotation':
-        throw new Error('Union types are unsupported in structs');
       default: {
         return wrapNullable(nullable, typeAnnotation);
       }

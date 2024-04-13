@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  * @format
- * @flow strict-local
+ * @flow
  */
 
 'use strict';
@@ -45,7 +45,9 @@ export default {
   title: 'SectionList Sticky Headers Enabled',
   name: 'SectionList-stickyHeadersEnabled',
   description: 'Toggle sticky headers on/off',
-  render: function (): React.MixedElement {
+  render: function (): React.Element<
+    typeof SectionList_stickySectionHeadersEnabled,
+  > {
     return <SectionList_stickySectionHeadersEnabled />;
   },
 };

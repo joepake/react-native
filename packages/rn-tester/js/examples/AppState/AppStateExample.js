@@ -12,21 +12,16 @@
 
 import type {AppStateValues} from 'react-native/Libraries/AppState/AppState';
 
-import {type EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
-
 const React = require('react');
-const {AppState, Platform, Text, View} = require('react-native');
+
+import {type EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
+const {AppState, Text, View, Platform} = require('react-native');
 
 class AppStateSubscription extends React.Component<
   $FlowFixMeProps,
   $FlowFixMeState,
 > {
-  state: {
-    appState: ?string,
-    eventsDetected: Array<string>,
-    memoryWarnings: number,
-    previousAppStates: Array<?(any | string)>,
-  } = {
+  state = {
     appState: AppState.currentState,
     previousAppStates: [],
     memoryWarnings: 0,
@@ -81,7 +76,7 @@ class AppStateSubscription extends React.Component<
     });
   };
 
-  render(): React.Node {
+  render() {
     if (this.props.showMemoryWarnings) {
       return (
         <View>

@@ -9,11 +9,11 @@
 
 'use strict';
 
-const fs = require('fs');
-const https = require('https');
-const os = require('os');
-const path = require('path');
 const {exec} = require('shelljs');
+const https = require('https');
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
 const yargs = require('yargs');
 
 const googleJavaFormatUrl =

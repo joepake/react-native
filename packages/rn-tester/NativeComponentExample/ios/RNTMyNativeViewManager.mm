@@ -8,7 +8,6 @@
 #import <React/RCTLog.h>
 #import <React/RCTUIManager.h>
 #import <React/RCTViewManager.h>
-#import "UIView+ColorOverlays.h"
 
 @interface RNTMyNativeViewManager : RCTViewManager
 @end
@@ -19,10 +18,6 @@ RCT_EXPORT_MODULE(RNTMyNativeView)
 
 RCT_EXPORT_VIEW_PROPERTY(backgroundColor, UIColor)
 
-RCT_EXPORT_VIEW_PROPERTY(onIntArrayChanged, RCTBubblingEventBlock)
-
-RCT_EXPORT_VIEW_PROPERTY(values, NSArray *)
-
 RCT_EXPORT_METHOD(callNativeMethodToChangeBackgroundColor : (nonnull NSNumber *)reactTag color : (NSString *)color)
 {
   [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
@@ -32,7 +27,17 @@ RCT_EXPORT_METHOD(callNativeMethodToChangeBackgroundColor : (nonnull NSNumber *)
       return;
     }
 
-    [view setBackgroundColorWithColorString:color];
+    unsigned rgbValue = 0;
+    NSString *colorString = [NSString stringWithCString:std::string([color UTF8String]).c_str()
+                                               encoding:[NSString defaultCStringEncoding]];
+    NSScanner *scanner = [NSScanner scannerWithString:colorString];
+    [scanner setScanLocation:1]; // bypass '#' character
+    [scanner scanHexInt:&rgbValue];
+
+    view.backgroundColor = [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16) / 255.0
+                                           green:((rgbValue & 0xFF00) >> 8) / 255.0
+                                            blue:(rgbValue & 0xFF) / 255.0
+                                           alpha:1.0];
   }];
 }
 

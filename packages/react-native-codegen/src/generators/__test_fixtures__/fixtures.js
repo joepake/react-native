@@ -41,8 +41,7 @@ const SCHEMA_WITH_TM_AND_FC: SchemaType = {
     },
     NativeCalculator: {
       type: 'NativeModule',
-      aliasMap: {},
-      enumMap: {},
+      aliases: {},
       spec: {
         properties: [
           {
@@ -73,7 +72,7 @@ const SCHEMA_WITH_TM_AND_FC: SchemaType = {
           },
         ],
       },
-      moduleName: 'Calculator',
+      moduleNames: ['Calculator'],
     },
   },
 };

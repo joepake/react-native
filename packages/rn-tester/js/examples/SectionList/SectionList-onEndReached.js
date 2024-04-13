@@ -18,7 +18,7 @@ export function SectionList_onEndReached(): React.Node {
       setOutput('onEndReached'),
     onEndReachedThreshold: 0,
   };
-  const ref = React.useRef<any>(null);
+  const ref = React.useRef(null);
 
   const onTest = () => {
     const scrollResponder = ref?.current?.getScrollResponder();
@@ -41,7 +41,7 @@ export default {
   title: 'SectionList onEndReached',
   name: 'SectionList-onEndReached',
   description: 'Test onEndReached behavior',
-  render: function (): React.MixedElement {
+  render: function (): React.Element<typeof SectionList_onEndReached> {
     return <SectionList_onEndReached />;
   },
 };

@@ -10,10 +10,11 @@
 
 'use strict';
 
-import type {GestureState} from 'react-native/Libraries/Interaction/PanResponder';
 import type {PressEvent} from 'react-native/Libraries/Types/CoreEventTypes';
+import type {GestureState} from 'react-native/Libraries/Interaction/PanResponder';
 
 const React = require('react');
+
 const {Animated, PanResponder, StyleSheet, View} = require('react-native');
 
 class AnExChained extends React.Component<Object, any> {

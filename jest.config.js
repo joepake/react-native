@@ -9,62 +9,39 @@
 
 'use strict';
 
-const {defaults} = require('jest-config');
-
 module.exports = {
   transform: {
     '^.+\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$':
-      '<rootDir>/packages/react-native/jest/assetFileTransformer.js',
-    '.*': './jest/preprocessor.js',
+      '<rootDir>/jest/assetFileTransformer.js',
+    '.*': './jest/private/preprocessor.js',
   },
-  setupFiles: ['./packages/react-native/jest/local-setup.js'],
-  fakeTimers: {
-    enableGlobally: true,
-    legacyFakeTimers: false,
-  },
-  snapshotFormat: {
-    escapeString: true,
-    printBasicPrototype: true,
-  },
-  // This allows running Meta-internal tests with the `-test.fb.js` suffix.
-  testRegex: '/__tests__/.*-test(\\.fb)?\\.js$',
+  setupFiles: ['./jest/setup.js'],
+  timers: 'fake',
+  testRegex: '/__tests__/.*-test\\.js$',
   testPathIgnorePatterns: [
     '/node_modules/',
-    '<rootDir>/packages/react-native/template',
-    '<rootDir>/packages/react-native/sdks',
-    '<rootDir>/packages/react-native/Libraries/Renderer',
-    '<rootDir>/packages/rn-tester/e2e',
-    '<rootDir>/packages/react-native-test-renderer/src',
+    '<rootDir>/template',
+    'Libraries/Renderer',
+    'packages/rn-tester/e2e',
   ],
   transformIgnorePatterns: ['node_modules/(?!@react-native/)'],
   haste: {
     defaultPlatform: 'ios',
     platforms: ['ios', 'android'],
   },
-  moduleNameMapper: {
-    // This module is internal to Meta and used by their custom React renderer.
-    // In tests, we can just use a mock.
-    '^ReactNativeInternalFeatureFlags$':
-      '<rootDir>/packages/react-native/jest/ReactNativeInternalFeatureFlagsMock.js',
-  },
-  moduleFileExtensions: ['fb.js'].concat(defaults.moduleFileExtensions),
-  modulePathIgnorePatterns: ['scripts/.*/__fixtures__/'],
   unmockedModulePathPatterns: [
     'node_modules/react/',
-    'packages/react-native/Libraries/Renderer',
+    'Libraries/Renderer',
     'promise',
     'source-map',
     'fastpath',
     'denodeify',
   ],
   testEnvironment: 'node',
-  collectCoverageFrom: [
-    'packages/react-native/Libraries/**/*.js',
-    'packages/react-native/src/**/*.js',
-  ],
+  collectCoverageFrom: ['Libraries/**/*.js'],
   coveragePathIgnorePatterns: [
     '/__tests__/',
     '/vendor/',
-    '<rootDir>/packages/react-native/Libraries/react-native/',
+    '<rootDir>/Libraries/react-native/',
   ],
 };

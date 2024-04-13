@@ -4,36 +4,61 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
+ * @emails oncall+react_native
  * @flow strict-local
  * @format
- * @oncall react_native
  */
 
 'use strict';
 
-const {
-  combineSchemasInFileListAndWriteToFile,
-} = require('./combine-js-to-schema');
-const yargs = require('yargs');
+const combine = require('./combine-js-to-schema');
+const fs = require('fs');
+const glob = require('glob');
+const path = require('path');
 
-const argv = yargs
-  .option('p', {
-    alias: 'platform',
-  })
-  .option('e', {
-    alias: 'exclude',
-  })
-  .parseSync();
+const [outfile, ...fileList] = process.argv.slice(2);
 
-const [outfile, ...fileList] = argv._;
-const platform: ?string = argv.platform;
-const exclude: string = argv.exclude;
-const excludeRegExp: ?RegExp =
-  exclude != null && exclude !== '' ? new RegExp(exclude) : null;
+function filterJSFile(file: string) {
+  return (
+    /^(Native.+|.+NativeComponent)/.test(path.basename(file)) &&
+    // NativeUIManager will be deprecated by Fabric UIManager.
+    // For now, ignore this spec completely because the types are not fully supported.
+    !file.endsWith('NativeUIManager.js') &&
+    // NativeSampleTurboModule is for demo purpose. It should be added manually to the
+    // app for now.
+    !file.endsWith('NativeSampleTurboModule.js') &&
+    !file.includes('__tests') &&
+    // Ignore TypeScript type declaration files.
+    !file.endsWith('.d.ts')
+  );
+}
 
-combineSchemasInFileListAndWriteToFile(
-  fileList,
-  platform != null ? platform.toLowerCase() : platform,
-  outfile,
-  excludeRegExp,
-);
+const allFiles = [];
+fileList.forEach(file => {
+  if (fs.lstatSync(file).isDirectory()) {
+    const dirFiles = glob
+      .sync(`${file}/**/*.{js,ts,tsx}`, {
+        nodir: true,
+      })
+      .filter(filterJSFile);
+    allFiles.push(...dirFiles);
+  } else if (filterJSFile(file)) {
+    allFiles.push(file);
+  }
+});
+
+const combined = combine(allFiles);
+
+// Warn users if there is no modules to process
+if (Object.keys(combined.modules).length === 0) {
+  console.error(
+    'No modules to process in combine-js-to-schema-cli. If this is unexpected, please check if you set up your NativeComponent correctly. See combine-js-to-schema.js for how codegen finds modules.',
+  );
+}
+const formattedSchema = JSON.stringify(combined, null, 2);
+
+if (outfile != null) {
+  fs.writeFileSync(outfile, formattedSchema);
+} else {
+  console.log(formattedSchema);
+}

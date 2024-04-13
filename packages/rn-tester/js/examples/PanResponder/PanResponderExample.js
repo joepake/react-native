@@ -5,20 +5,20 @@
  * LICENSE file in the root directory of this source tree.
  *
  * @format
- * @flow strict-local
+ * @flow
  */
 
 'use strict';
 
-import type {
-  GestureState,
-  PanResponderInstance,
-} from 'react-native/Libraries/Interaction/PanResponder';
-import type {PressEvent} from 'react-native/Libraries/Types/CoreEventTypes';
-
-const RNTesterPage = require('../../components/RNTesterPage');
 const React = require('react');
 const {PanResponder, StyleSheet, View} = require('react-native');
+const RNTesterPage = require('../../components/RNTesterPage');
+
+import type {
+  PanResponderInstance,
+  GestureState,
+} from 'react-native/Libraries/Interaction/PanResponder';
+import type {PressEvent} from 'react-native/Libraries/Types/CoreEventTypes';
 
 type CircleStyles = {
   backgroundColor?: string,
@@ -99,7 +99,10 @@ class PanResponderExample extends React.Component<Props, State> {
 
   render(): React.Node {
     return (
-      <RNTesterPage noScroll={true} title="Basic gesture handling">
+      <RNTesterPage
+        noSpacer={true}
+        noScroll={true}
+        title="Basic gesture handling">
         <View style={styles.container}>
           <View
             ref={circle => {

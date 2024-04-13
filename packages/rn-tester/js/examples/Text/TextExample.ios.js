@@ -10,12 +10,11 @@
 
 'use strict';
 
-import type {RNTesterModule} from '../../types/RNTesterTypes';
-
+const React = require('react');
+const TextAncestor = require('react-native/Libraries/Text/TextAncestor');
+const TextInlineView = require('../../components/TextInlineView');
 import TextLegend from '../../components/TextLegend';
 
-const TextInlineView = require('../../components/TextInlineView');
-const React = require('react');
 const {
   Button,
   LayoutAnimation,
@@ -24,7 +23,6 @@ const {
   TextInput,
   View,
 } = require('react-native');
-const TextAncestor = require('react-native/Libraries/Text/TextAncestor');
 
 // TODO: Is there a cleaner way to flip the TextAncestor value to false? I
 //   suspect apps won't even be able to leverage this workaround because
@@ -55,7 +53,7 @@ class TextAlignRTLExample extends React.Component<
     };
   }
 
-  render(): React.Node {
+  render() {
     const {isRTL} = this.state;
     const toggleRTL = () => this.setState({isRTL: !isRTL});
     return (
@@ -92,7 +90,7 @@ class TextAlignRTLExample extends React.Component<
 }
 
 class Entity extends React.Component<$FlowFixMeProps> {
-  render(): React.Node {
+  render() {
     return (
       <Text style={{fontWeight: '500', color: '#527fe4'}}>
         {this.props.children}
@@ -102,10 +100,7 @@ class Entity extends React.Component<$FlowFixMeProps> {
 }
 
 class AttributeToggler extends React.Component<{...}, $FlowFixMeState> {
-  state: any | {fontSize: number, fontWeight: string} = {
-    fontWeight: 'bold',
-    fontSize: 15,
-  };
+  state = {fontWeight: 'bold', fontSize: 15};
 
   toggleWeight = () => {
     this.setState({
@@ -119,20 +114,19 @@ class AttributeToggler extends React.Component<{...}, $FlowFixMeState> {
     });
   };
 
-  render(): React.Node {
+  render() {
     const curStyle = {
       fontWeight: this.state.fontWeight,
       fontSize: this.state.fontSize,
     };
     return (
       <View>
-        {/* $FlowFixMe[incompatible-type] */}
         <Text style={curStyle}>
           Tap the controls below to change attributes.
         </Text>
         <Text>
           <Text>
-            See how it will even work on {/* $FlowFixMe[incompatible-type] */}
+            See how it will even work on{' '}
             <Text style={curStyle}>this nested text</Text>
           </Text>
         </Text>
@@ -162,7 +156,7 @@ class AdjustingFontSize extends React.Component<
   AdjustingFontSizeProps,
   AdjustingFontSizeState,
 > {
-  state: AdjustingFontSizeState = {
+  state = {
     dynamicText: '',
     shouldRender: true,
   };
@@ -198,7 +192,7 @@ class AdjustingFontSize extends React.Component<
     });
   };
 
-  render(): React.Node {
+  render() {
     if (!this.state.shouldRender) {
       return <View />;
     }
@@ -276,7 +270,7 @@ class AdjustingFontSize extends React.Component<
 }
 
 class TextBaseLineLayoutExample extends React.Component<{}, mixed> {
-  render(): React.Node {
+  render() {
     const texts = [];
     for (let i = 9; i >= 0; i--) {
       texts.push(
@@ -384,21 +378,7 @@ class TextRenderInfoExample extends React.Component<
     }>,
   },
 > {
-  state: {
-    fontSize: number,
-    numberOfTextBlocks: number,
-    textMetrics: $ReadOnly<{
-      ascender: number,
-      capHeight: number,
-      descender: number,
-      height: number,
-      text?: string,
-      width: number,
-      x: number,
-      xHeight: number,
-      y: number,
-    }>,
-  } = {
+  state = {
     textMetrics: {
       x: 0,
       y: 0,
@@ -413,7 +393,7 @@ class TextRenderInfoExample extends React.Component<
     fontSize: 14,
   };
 
-  render(): React.Node {
+  render() {
     const topOfBox =
       this.state.textMetrics.y +
       this.state.textMetrics.height -
@@ -455,7 +435,7 @@ class TextRenderInfoExample extends React.Component<
                 this.setState({textMetrics: lines[lines.length - 1]});
               }
             }}>
-            {new Array<string>(this.state.numberOfTextBlocks)
+            {new Array(this.state.numberOfTextBlocks)
               .fill('A tiny block of text.')
               .join(' ')}
           </Text>
@@ -497,19 +477,7 @@ class TextWithCapBaseBox extends React.Component<
     }>,
   },
 > {
-  state: {
-    textMetrics: $ReadOnly<{
-      ascender: number,
-      capHeight: number,
-      descender: number,
-      height: number,
-      text?: string,
-      width: number,
-      x: number,
-      xHeight: number,
-      y: number,
-    }>,
-  } = {
+  state = {
     textMetrics: {
       x: 0,
       y: 0,
@@ -521,7 +489,7 @@ class TextWithCapBaseBox extends React.Component<
       xHeight: 0,
     },
   };
-  render(): React.Node {
+  render() {
     return (
       <Text
         onTextLayout={event => {
@@ -548,7 +516,12 @@ class TextWithCapBaseBox extends React.Component<
   }
 }
 
-const examples = [
+exports.title = 'Text';
+exports.documentationURL = 'https://reactnative.dev/docs/text';
+exports.category = 'Basic';
+exports.description = 'Base component for rendering styled text.';
+exports.displayName = 'TextExample';
+exports.examples = [
   {
     title: 'Wrap',
     render: function (): React.Node {
@@ -636,9 +609,6 @@ const examples = [
             }}>
             Verdana bold
           </Text>
-          <Text style={{fontFamily: 'Unknown Font Family'}}>
-            Unknown Font Family
-          </Text>
         </View>
       );
     },
@@ -681,15 +651,6 @@ const examples = [
           <Text style={{fontWeight: '300'}}>FONT WEIGHT 300</Text>
           <Text style={{fontWeight: '200'}}>FONT WEIGHT 200</Text>
           <Text style={{fontWeight: '100'}}>FONT WEIGHT 100</Text>
-          <Text style={{fontWeight: 900}}>FONT WEIGHT 900</Text>
-          <Text style={{fontWeight: 800}}>FONT WEIGHT 800</Text>
-          <Text style={{fontWeight: 700}}>FONT WEIGHT 700</Text>
-          <Text style={{fontWeight: 600}}>FONT WEIGHT 600</Text>
-          <Text style={{fontWeight: 500}}>FONT WEIGHT 500</Text>
-          <Text style={{fontWeight: 400}}>FONT WEIGHT 400</Text>
-          <Text style={{fontWeight: 300}}>FONT WEIGHT 300</Text>
-          <Text style={{fontWeight: 200}}>FONT WEIGHT 200</Text>
-          <Text style={{fontWeight: 100}}>FONT WEIGHT 100</Text>
         </View>
       );
     },
@@ -1236,105 +1197,4 @@ const examples = [
       );
     },
   },
-  {
-    title: 'Selectable Text',
-    render: function (): React.Node {
-      return (
-        <View>
-          <Text style={{userSelect: 'auto'}}>Text element is selectable</Text>
-        </View>
-      );
-    },
-  },
-  {
-    title: 'Line Break Strategy',
-    render: function (): React.Node {
-      const lineBreakStrategy = ['none', 'standard', 'hangul-word', 'push-out'];
-      const textByCode = {
-        en: 'lineBreakStrategy lineBreakStrategy lineBreakStrategy lineBreakStrategy',
-        ko: '한글개행 한글개행 한글개행 한글개행 한글개행 한글개행 한글개행 한글개행',
-        ja: 'かいぎょう かいぎょう かいぎょう かいぎょう かいぎょう かいぎょう',
-        cn: '改行 改行 改行 改行 改行 改行 改行 改行 改行 改行 改行 改行',
-      };
-
-      return (
-        <View>
-          {lineBreakStrategy.map(strategy => {
-            return (
-              <View key={strategy} style={{marginBottom: 12}}>
-                <Text
-                  style={{
-                    backgroundColor: 'lightgrey',
-                  }}>{`Strategy: ${strategy}`}</Text>
-                {Object.keys(textByCode).map(code => {
-                  return (
-                    <View key={code}>
-                      <Text style={{fontWeight: 'bold'}}>{`[${code}]`}</Text>
-                      <Text lineBreakStrategyIOS={strategy}>
-                        {textByCode[code]}
-                      </Text>
-                    </View>
-                  );
-                })}
-              </View>
-            );
-          })}
-        </View>
-      );
-    },
-  },
-  {
-    title: 'Dynamic Type (iOS only)',
-    render: function (): React.Node {
-      const boldStyle = {fontWeight: 'bold'};
-      const boxStyle = {
-        borderWidth: 1,
-        padding: 8,
-        margin: 8,
-      };
-      return (
-        <View style={{marginTop: 10, marginBottom: 10}}>
-          <Text>
-            Adjust text size in Accessibility settings and watch how the font
-            sizes change relative to each other.
-          </Text>
-          <View style={boxStyle}>
-            <Text style={boldStyle}>With `dynamicTypeRamp`:</Text>
-            <Text style={{fontSize: 34}} dynamicTypeRamp="largeTitle">
-              Large Title
-            </Text>
-            <Text style={{fontSize: 28}} dynamicTypeRamp="title1">
-              Title
-            </Text>
-            <Text style={{fontSize: 22}} dynamicTypeRamp="title2">
-              Title 2
-            </Text>
-            <Text style={{fontSize: 20}} dynamicTypeRamp="title3">
-              Title 3
-            </Text>
-            <Text style={{fontSize: 17}} dynamicTypeRamp="body">
-              Body
-            </Text>
-          </View>
-          <View style={boxStyle}>
-            <Text style={boldStyle}>Without `dynamicTypeRamp`:</Text>
-            <Text style={{fontSize: 34}}>Large Title</Text>
-            <Text style={{fontSize: 28}}>Title</Text>
-            <Text style={{fontSize: 22}}>Title 2</Text>
-            <Text style={{fontSize: 20}}>Title 3</Text>
-            <Text style={{fontSize: 17}}>Body</Text>
-          </View>
-        </View>
-      );
-    },
-  },
 ];
-
-module.exports = ({
-  title: 'Text',
-  documentationURL: 'https://reactnative.dev/docs/text',
-  category: 'Basic',
-  description: 'Base component for rendering styled text.',
-  displayName: 'TextExample',
-  examples,
-}: RNTesterModule);

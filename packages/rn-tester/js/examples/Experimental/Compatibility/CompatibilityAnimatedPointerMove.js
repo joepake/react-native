@@ -5,14 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  *
  * @format
- * @flow strict-local
+ * @flow
  */
 
-import type {RNTesterModuleExample} from '../../../types/RNTesterTypes';
-
-import ToggleNativeDriver from '../../Animated/utils/ToggleNativeDriver';
 import * as React from 'react';
-import {Animated, StyleSheet, Text} from 'react-native';
+import {Text, Animated, StyleSheet} from 'react-native';
+import type {RNTesterModuleExample} from '../../../types/RNTesterTypes';
+import ToggleNativeDriver from '../../Animated/utils/ToggleNativeDriver';
 
 const WIDTH = 200;
 const HEIGHT = 250;

@@ -10,19 +10,19 @@
 
 'use strict';
 import type {CommandParamTypeAnnotation} from '../../CodegenSchema';
+
 import type {
+  NamedShape,
   CommandTypeAnnotation,
   ComponentShape,
-  NamedShape,
   PropTypeAnnotation,
   SchemaType,
 } from '../../CodegenSchema';
-
 const {
-  getDelegateJavaClassName,
   getImports,
-  getInterfaceJavaClassName,
   toSafeJavaString,
+  getInterfaceJavaClassName,
+  getDelegateJavaClassName,
 } = require('./JavaHelpers');
 
 // File path -> contents
@@ -122,14 +122,10 @@ function getJavaValueForProp(
           return 'ColorPropConverter.getColor(value, view.getContext())';
         case 'ImageSourcePrimitive':
           return '(ReadableMap) value';
-        case 'ImageRequestPrimitive':
-          return '(ReadableMap) value';
         case 'PointPrimitive':
           return '(ReadableMap) value';
         case 'EdgeInsetsPrimitive':
           return '(ReadableMap) value';
-        case 'DimensionPrimitive':
-          return 'DimensionPropConverter.getDimension(value)';
         default:
           (typeAnnotation.name: empty);
           throw new Error('Received unknown ReservedPropTypeAnnotation');
@@ -144,8 +140,6 @@ function getJavaValueForProp(
       return '(String) value';
     case 'Int32EnumTypeAnnotation':
       return `value == null ? ${typeAnnotation.default} : ((Double) value).intValue()`;
-    case 'MixedTypeAnnotation':
-      return 'new DynamicFromObject(value)';
     default:
       (typeAnnotation: empty);
       throw new Error('Received invalid typeAnnotation');
@@ -202,8 +196,6 @@ function getCommandArgJavaType(
       return `args.getInt(${index})`;
     case 'StringTypeAnnotation':
       return `args.getString(${index})`;
-    case 'ArrayTypeAnnotation':
-      return `args.getArray(${index})`;
     default:
       (typeAnnotation.type: empty);
       throw new Error(`Receieved invalid type: ${typeAnnotation.type}`);
@@ -297,13 +289,12 @@ module.exports = {
     schema: SchemaType,
     packageName?: string,
     assumeNonnull: boolean = false,
-    headerPrefix?: string,
   ): FilesOutput {
     // TODO: This doesn't support custom package name yet.
     const normalizedPackageName = 'com.facebook.react.viewmanagers';
     const outputDir = `java/${normalizedPackageName.replace(/\./g, '/')}`;
 
-    const files = new Map<string, string>();
+    const files = new Map();
     Object.keys(schema.modules).forEach(moduleName => {
       const module = schema.modules[moduleName];
       if (module.type !== 'Component') {

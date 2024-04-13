@@ -11,16 +11,12 @@
 'use strict';
 
 import type {
+  SchemaType,
   NativeModuleAliasMap,
-  NativeModuleEnumMembers,
   NativeModuleObjectTypeAnnotation,
   NativeModuleSchema,
-  NativeModuleTypeAnnotation,
-  Nullable,
-  SchemaType,
 } from '../../CodegenSchema';
 
-const {unwrapNullable} = require('../../parsers/parsers-commons');
 const invariant = require('invariant');
 
 export type AliasResolver = (
@@ -51,41 +47,7 @@ function getModules(
   );
 }
 
-function isDirectRecursiveMember(
-  parentObjectAliasName: ?string,
-  nullableTypeAnnotation: Nullable<NativeModuleTypeAnnotation>,
-): boolean {
-  const [typeAnnotation] = unwrapNullable<NativeModuleTypeAnnotation>(
-    nullableTypeAnnotation,
-  );
-  return (
-    parentObjectAliasName !== undefined &&
-    typeAnnotation.name === parentObjectAliasName
-  );
-}
-
-function isArrayRecursiveMember(
-  parentObjectAliasName: ?string,
-  nullableTypeAnnotation: Nullable<NativeModuleTypeAnnotation>,
-): boolean {
-  const [typeAnnotation] = unwrapNullable<NativeModuleTypeAnnotation>(
-    nullableTypeAnnotation,
-  );
-  return (
-    parentObjectAliasName !== undefined &&
-    typeAnnotation.type === 'ArrayTypeAnnotation' &&
-    typeAnnotation.elementType?.name === parentObjectAliasName
-  );
-}
-
-function getAreEnumMembersInteger(members: NativeModuleEnumMembers): boolean {
-  return !members.some(m => `${m.value}`.includes('.'));
-}
-
 module.exports = {
   createAliasResolver,
   getModules,
-  getAreEnumMembersInteger,
-  isDirectRecursiveMember,
-  isArrayRecursiveMember,
 };

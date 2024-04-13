@@ -5,12 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  *
  * @format
- * @flow strict-local
+ * @flow
  */
 
-import {RNTesterThemeContext} from './RNTesterTheme';
-
 const React = require('react');
+import {RNTesterThemeContext} from './RNTesterTheme';
 const {StyleSheet, Text} = require('react-native');
 
 type Props = $ReadOnly<{|

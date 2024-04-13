@@ -7,7 +7,6 @@
 
 package com.facebook.react.tasks
 
-import com.facebook.react.utils.Os.cliPath
 import com.facebook.react.utils.windowsAwareCommandLine
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFile
@@ -35,8 +34,7 @@ abstract class GenerateCodegenSchemaTask : Exec() {
       project.fileTree(jsRootDir) {
         it.include("**/*.js")
         it.include("**/*.ts")
-        // We want to exclude the build directory, to don't pick them up for execution avoidance.
-        it.exclude("**/build/**/*")
+        it.exclude("**/generated/source/codegen/**/*")
       }
 
   @get:OutputFile
@@ -56,7 +54,6 @@ abstract class GenerateCodegenSchemaTask : Exec() {
   }
 
   internal fun setupCommandLine() {
-    val workingDir = project.projectDir
     commandLine(
         windowsAwareCommandLine(
             *nodeExecutableAndArgs.get().toTypedArray(),
@@ -64,13 +61,9 @@ abstract class GenerateCodegenSchemaTask : Exec() {
                 .file("lib/cli/combine/combine-js-to-schema-cli.js")
                 .get()
                 .asFile
-                .cliPath(workingDir),
-            "--platform",
-            "android",
-            "--exclude",
-            "NativeSampleTurboModule",
-            generatedSchemaFile.get().asFile.cliPath(workingDir),
-            jsRootDir.asFile.get().cliPath(workingDir),
+                .absolutePath,
+            generatedSchemaFile.get().asFile.absolutePath,
+            jsRootDir.asFile.get().absolutePath,
         ))
   }
 }

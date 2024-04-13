@@ -10,12 +10,11 @@
 
 'use strict';
 
-import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import type {PressEvent} from 'react-native/Libraries/Types/CoreEventTypes';
-
-import {RNTesterThemeContext} from './RNTesterTheme';
 import * as React from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Text, Pressable, StyleSheet, View} from 'react-native';
+import type {PressEvent} from 'react-native/Libraries/Types/CoreEventTypes';
+import type {ViewStyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import {RNTesterThemeContext} from './RNTesterTheme';
 
 type Props = $ReadOnly<{|
   testID?: ?string,
@@ -43,7 +42,7 @@ export default function RNTOption(props: Props): React.Node {
           : props.selected
       }
       hitSlop={4}
-      onPress={props.disabled === true ? undefined : props.onPress}
+      onPress={props.onPress}
       onPressIn={() => setPressed(true)}
       onPressOut={() => setPressed(false)}
       testID={props.testID}>

@@ -9,12 +9,11 @@
  */
 
 import type {RNTesterModuleExample} from '../../types/RNTesterTypes';
-
+import * as React from 'react';
+import {Animated, View, StyleSheet, Text} from 'react-native';
 import RNTConfigurationBlock from '../../components/RNTConfigurationBlock';
 import RNTesterButton from '../../components/RNTesterButton';
 import ToggleNativeDriver from './utils/ToggleNativeDriver';
-import * as React from 'react';
-import {Animated, StyleSheet, Text, View} from 'react-native';
 
 function AnimatedView({useNativeDriver}: {useNativeDriver: boolean}) {
   const animations = [];
@@ -33,25 +32,6 @@ function AnimatedView({useNativeDriver}: {useNativeDriver: boolean}) {
   animations.push(
     Animated.timing(animatedViewStyle.borderColor, {
       toValue: new Animated.Color('purple'),
-      duration: 1000,
-      useNativeDriver,
-    }),
-  );
-
-  const animatedBaseValue = new Animated.Value(0);
-  const interpolationAnimatedStyle = {
-    backgroundColor: animatedBaseValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['blue', 'red'],
-    }),
-    borderColor: animatedBaseValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['orange', 'purple'],
-    }),
-  };
-  animations.push(
-    Animated.timing(animatedBaseValue, {
-      toValue: 1,
       duration: 1000,
       useNativeDriver,
     }),
@@ -101,12 +81,7 @@ function AnimatedView({useNativeDriver}: {useNativeDriver: boolean}) {
         }}>
         Press to animate
       </RNTesterButton>
-      <View style={styles.boxes}>
-        <Animated.View style={[styles.animatedView, animatedViewStyle]} />
-        <Animated.View
-          style={[styles.animatedView, interpolationAnimatedStyle]}
-        />
-      </View>
+      <Animated.View style={[styles.animatedView, animatedViewStyle]} />
       <Text style={styles.animatedText}>
         <Text>The </Text>
         <Animated.Text style={animatedFirstSpanTextStyle}>quick</Animated.Text>
@@ -146,7 +121,6 @@ const styles = StyleSheet.create({
     height: 100,
     width: 100,
     borderWidth: 10,
-    marginRight: 10,
   },
   animatedText: {
     fontSize: 20,
@@ -155,9 +129,6 @@ const styles = StyleSheet.create({
   animatedImage: {
     height: 100,
     width: 100,
-  },
-  boxes: {
-    flexDirection: 'row',
   },
 });
 

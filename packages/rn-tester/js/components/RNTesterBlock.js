@@ -8,8 +8,8 @@
  * @flow
  */
 
-import {RNTesterThemeContext} from './RNTesterTheme';
 import * as React from 'react';
+import {RNTesterThemeContext} from './RNTesterTheme';
 import {StyleSheet, Text, View} from 'react-native';
 
 type Props = $ReadOnly<{|
@@ -30,20 +30,16 @@ const RNTesterBlock = ({description, title, children}: Props): React.Node => {
         },
       ]}>
       <View style={[styles.titleContainer]}>
-        {title && (
-          <Text style={[styles.titleText, {color: theme.LabelColor}]}>
-            {title}
-          </Text>
-        )}
-        {description && (
-          <Text
-            style={[
-              styles.descriptionText,
-              {color: theme.LabelColor, marginTop: description ? 10 : 0},
-            ]}>
-            {description}
-          </Text>
-        )}
+        <Text style={[styles.titleText, {color: theme.LabelColor}]}>
+          {title}
+        </Text>
+        <Text
+          style={[
+            styles.descriptionText,
+            {color: theme.LabelColor, marginTop: description ? 10 : 0},
+          ]}>
+          {description}
+        </Text>
       </View>
       <View style={styles.children}>{children}</View>
     </View>
@@ -54,6 +50,7 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 0,
     borderWidth: 1,
+    marginTop: 30,
     marginHorizontal: 20,
   },
   titleText: {

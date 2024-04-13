@@ -12,13 +12,7 @@ import type {PlatformTestHarness} from '../PlatformTest/RNTesterPlatformTestType
 import type {ViewProps} from 'react-native/Libraries/Components/View/ViewPropTypes';
 import type {PointerEvent} from 'react-native/Libraries/Types/CoreEventTypes';
 
-import * as React from 'react';
 import {useMemo} from 'react';
-import {View} from 'react-native';
-
-// These props are not in the specification but are present in the WPT so we keep them
-// but marked as skipped so we don't prioritize them
-const SKIPPED_PROPS = ['fromElement', 'toElement'];
 
 // Check for conformance to PointerEvent interface
 // TA: 1.1, 1.2, 1.6, 1.7, 1.8, 1.9, 1.10, 1.11, 1.12, 1.13
@@ -101,54 +95,33 @@ export function check_PointerEvent(
     const name = attr[2];
     const value = attr[3];
 
-    const skip = SKIPPED_PROPS.includes(name);
-
     // existence check
-    harness.test(
-      ({assert_true}) => {
-        assert_true(
-          name in nativeEvent,
-          name + ' attribute in ' + eventType + ' event',
-        );
-      },
-      pointerTestName + '.' + name + ' attribute exists',
-      {skip},
-    );
+    harness.test(({assert_true}) => {
+      assert_true(
+        name in nativeEvent,
+        name + ' attribute in ' + eventType + ' event',
+      );
+    }, pointerTestName + '.' + name + ' attribute exists');
 
     // readonly check
     // TODO
 
     // type check
-    harness.test(
-      ({assert_true}) => {
-        assert_true(
-          // $FlowFixMe
-          idl_type_check[type](nativeEvent[name]),
-          name + ' attribute of type ' + type,
-        );
-      },
-      pointerTestName +
-        '.' +
-        name +
-        ' IDL type ' +
-        type +
-        ' (JS type was ' +
+    harness.test(({assert_true}) => {
+      assert_true(
         // $FlowFixMe
-        typeof nativeEvent[name] +
-        ')',
-      {skip},
-    );
+        idl_type_check[type](nativeEvent[name]),
+        name + ' attribute of type ' + type,
+      );
+      // $FlowFixMe
+    }, pointerTestName + '.' + name + ' IDL type ' + type + ' (JS type was ' + typeof nativeEvent[name] + ')');
 
     // value check if defined
     if (value !== undefined) {
-      harness.test(
-        ({assert_equals}) => {
-          // $FlowFixMe
-          assert_equals(nativeEvent[name], value, name + ' attribute value');
-        },
-        pointerTestName + '.' + name + ' value is ' + String(value) + '.',
-        {skip},
-      );
+      harness.test(({assert_equals}) => {
+        // $FlowFixMe
+        assert_equals(nativeEvent[name], value, name + ' attribute value');
+      }, pointerTestName + '.' + name + ' value is ' + String(value) + '.');
     }
   });
 
@@ -218,7 +191,7 @@ export function useTestEventHandler(
   const eventProps: any = useMemo(() => {
     const handlerFactory = (eventName: string) => (event: any) =>
       handler(event, eventName);
-    const props: {[string]: (event: any) => void} = {};
+    const props = {};
     for (const eventName of eventNames) {
       const eventPropName =
         'on' + eventName[0].toUpperCase() + eventName.slice(1);
@@ -227,53 +200,4 @@ export function useTestEventHandler(
     return props;
   }, [eventNames, handler]);
   return eventProps;
-}
-
-type EventName = 'onClick' | 'onPointerDown' | 'onPointerUp';
-
-export type EventOccurrence = {
-  id: string,
-  eventName: EventName,
-};
-
-export function mkEvent(id: string, eventName: EventName): EventOccurrence {
-  return {
-    id,
-    eventName,
-  };
-}
-
-export type EventTrackerProps = $ReadOnly<{
-  eventsRef?: {current: Array<EventOccurrence>},
-  onAnyEvent?: (EventOccurrence, PointerEvent) => void,
-  eventsToTrack: Array<EventName>,
-  id: string,
-  ...ViewProps,
-}>;
-
-type HandlerFunction = PointerEvent => void;
-
-export function EventTracker(props: EventTrackerProps): React.MixedElement {
-  const {eventsToTrack, eventsRef, id, style, onAnyEvent, ...viewProps} = props;
-  const handlerProps = useMemo(() => {
-    const handlers: {
-      onClick?: HandlerFunction,
-      onPointerDown?: HandlerFunction,
-      onPointerUp?: HandlerFunction,
-    } = {};
-    for (const eventName of eventsToTrack) {
-      handlers[eventName] = (e: PointerEvent) => {
-        const occurrence = {id, eventName};
-        eventsRef?.current.push(occurrence);
-        onAnyEvent?.(occurrence, e);
-      };
-    }
-    return handlers;
-  }, [eventsToTrack, id, eventsRef, onAnyEvent]);
-
-  return (
-    <View {...handlerProps} {...viewProps} style={props.style} id={props.id}>
-      {props.children}
-    </View>
-  );
 }

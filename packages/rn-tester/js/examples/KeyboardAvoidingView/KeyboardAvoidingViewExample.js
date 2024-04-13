@@ -11,19 +11,20 @@
 'use strict';
 
 const React = require('react');
-const {useState} = require('react');
 const {
   Alert,
-  Button,
   KeyboardAvoidingView,
   Modal,
-  Pressable,
   StyleSheet,
   Text,
   TextInput,
+  Button,
+  Pressable,
   TouchableOpacity,
   View,
 } = require('react-native');
+
+const {useState} = require('react');
 
 const onButtonPress = () => {
   Alert.alert('Successfully Registered!');
@@ -36,11 +37,7 @@ const TextInputForm = () => {
       <TextInput placeholder="Username" style={styles.textInput} />
       <TextInput placeholder="Password" style={styles.textInput} />
       <TextInput placeholder="Confirm Password" style={styles.textInput} />
-      <Button
-        testID="register_button"
-        title="Register"
-        onPress={onButtonPress}
-      />
+      <Button title="Register" onPress={onButtonPress} />
     </View>
   );
 };
@@ -117,9 +114,7 @@ const KeyboardAvoidingViewBehaviour = () => {
       </Modal>
       <View>
         <Pressable onPress={() => setModalOpen(true)}>
-          <Text testID="keyboard_avoiding_view_behaviors_open">
-            Open Example
-          </Text>
+          <Text>Open Example</Text>
         </Pressable>
       </View>
     </View>

@@ -5,16 +5,17 @@
  * LICENSE file in the root directory of this source tree.
  *
  * @format
- * @flow strict-local
+ * @flow
  */
 
 import type {PlatformTestComponentBaseProps} from './RNTesterPlatformTestTypes';
 
-import RNTesterPlatformTestInstructions from './RNTesterPlatformTestInstructions';
-import RNTesterPlatformTestResultView from './RNTesterPlatformTestResultView';
-import usePlatformTestHarness from './usePlatformTestHarness';
 import * as React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
+
+import RNTesterPlatformTestInstructions from './RNTesterPlatformTestInstructions';
+import usePlatformTestHarness from './usePlatformTestHarness';
+import RNTesterPlatformTestResultView from './RNTesterPlatformTestResultView';
 
 type Props = $ReadOnly<{|
   title: string,
@@ -38,11 +39,9 @@ export default function RNTesterPlatformTest(props: Props): React.MixedElement {
     <View style={styles.root}>
       <View style={styles.testcaseContainer}>
         <Text style={[styles.textBlock, styles.title]}>{title}</Text>
-        {description !== '' ? (
-          <Text style={[styles.textBlock, styles.description]}>
-            {description}
-          </Text>
-        ) : null}
+        <Text style={[styles.textBlock, styles.description]}>
+          {description}
+        </Text>
         <RNTesterPlatformTestInstructions
           instructions={instructions}
           style={[styles.instructions, styles.block]}

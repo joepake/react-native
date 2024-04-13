@@ -9,7 +9,6 @@
  */
 
 import type {RNTesterModuleExample} from '../../types/RNTesterTypes';
-
 import BaseFlatListExample from './BaseFlatListExample';
 import * as React from 'react';
 

@@ -9,10 +9,9 @@
  */
 
 import type {ViewToken} from 'react-native/Libraries/Lists/ViewabilityHelper';
-
 import SectionListBaseExample from './SectionListBaseExample';
+import {View, StyleSheet, SectionList} from 'react-native';
 import * as React from 'react';
-import {SectionList, StyleSheet, View} from 'react-native';
 
 const VIEWABILITY_CONFIG = {
   minimumViewTime: 1000,
@@ -46,7 +45,7 @@ export function SectionList_onViewableItemsChanged(props: {
     viewabilityConfig,
     horizontal,
   };
-  const ref = React.useRef<any>(null);
+  const ref = React.useRef(null);
   const onTest =
     useScrollRefScroll === true
       ? () => {
@@ -73,7 +72,9 @@ const styles = StyleSheet.create({
 export default {
   title: 'SectionList On Viewable Items Changed',
   name: 'SectionList_onViewableItemsChanged',
-  render: function (): React.MixedElement {
+  render: function (): React.Element<
+    typeof SectionList_onViewableItemsChanged,
+  > {
     return (
       <SectionList_onViewableItemsChanged
         viewabilityConfig={VIEWABILITY_CONFIG}

@@ -11,20 +11,21 @@
 'use strict';
 
 const React = require('react');
+
 const {
   Alert,
   Animated,
-  Button,
   I18nManager,
   Image,
   PixelRatio,
   Platform,
   StyleSheet,
-  Switch,
   Text,
   TextInput,
   TouchableWithoutFeedback,
+  Switch,
   View,
+  Button,
 } = require('react-native');
 
 type RTLToggleState = {isRTL: boolean, ...};
@@ -166,7 +167,6 @@ function withRTLState(
       };
     }
 
-    // $FlowFixMe[missing-local-annot]
     render() {
       const setRTL = (isRTL: boolean) => this.setState({isRTL: isRTL});
       return (
@@ -206,7 +206,7 @@ class RTLToggleExample extends React.Component<any, RTLToggleState> {
     };
   }
 
-  render(): React.Node {
+  render() {
     return (
       <View>
         <View style={styles.directionBox}>
@@ -267,7 +267,7 @@ class AnimationExample extends React.Component<any, AnimationState> {
     };
   }
 
-  render(): React.Node {
+  render() {
     return (
       <View>
         <RTLToggler setRTL={this.props.setRTL} isRTL={this.props.isRTL} />
@@ -497,35 +497,6 @@ const BorderRadiiExample = withRTLState(({isRTL, setRTL}) => {
             borderTopEndRadius: 20,
             borderBottomStartRadius: 30,
             borderBottomEndRadius: 40,
-            padding: 10,
-          }}>
-          <View>
-            <RTLToggler setRTL={setRTL} isRTL={isRTL} />
-          </View>
-        </View>
-      </View>
-    </View>
-  );
-});
-
-const LogicalBorderRadiiExample = withRTLState(({isRTL, setRTL}) => {
-  return (
-    <View>
-      <Text style={styles.bold}>Styles</Text>
-      <Text>borderStartStartRadius: 10,</Text>
-      <Text>borderStartEndRadius: 20,</Text>
-      <Text>borderEndStartRadius: 30,</Text>
-      <Text>borderEndEndRadius: 40</Text>
-      <Text />
-      <Text style={styles.bold}>Demo: </Text>
-      <View style={directionStyle(isRTL)}>
-        <View
-          style={{
-            borderWidth: 10,
-            borderStartStartRadius: 10,
-            borderStartEndRadius: 20,
-            borderEndStartRadius: 30,
-            borderEndEndRadius: 40,
             padding: 10,
           }}>
           <View>
@@ -797,12 +768,6 @@ exports.examples = [
     title: 'Border Radii Start/End',
     render: function (): React.Element<any> {
       return <BorderRadiiExample />;
-    },
-  },
-  {
-    title: 'Logical Border Radii Start/End',
-    render: function (): React.Element<any> {
-      return <LogicalBorderRadiiExample />;
     },
   },
   {

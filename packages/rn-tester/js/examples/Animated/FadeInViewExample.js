@@ -9,12 +9,11 @@
  */
 
 import type {RNTesterModuleExample} from '../../types/RNTesterTypes';
-
-import RNTConfigurationBlock from '../../components/RNTConfigurationBlock';
+import * as React from 'react';
 import RNTesterButton from '../../components/RNTesterButton';
 import ToggleNativeDriver from './utils/ToggleNativeDriver';
-import * as React from 'react';
-import {Animated, StyleSheet, Text, View} from 'react-native';
+import {Text, StyleSheet, View, Animated} from 'react-native';
+import RNTConfigurationBlock from '../../components/RNTConfigurationBlock';
 
 const styles = StyleSheet.create({
   content: {

@@ -11,10 +11,10 @@
 'use strict';
 
 const React = require('react');
-const {Button, Share, StyleSheet, Text, View} = require('react-native');
+
+const {StyleSheet, View, Text, Button, Share} = require('react-native');
 
 const shareMessage = () => {
-  // $FlowFixMe[unused-promise]
   Share.share({
     message:
       ('Our top priority for React Native is to match the expectations people have for each platform. This is why React Native renders to platform primitives. We value native look-and-feel over cross-platform consistency.' +
@@ -23,7 +23,6 @@ const shareMessage = () => {
 };
 
 const shareText = () => {
-  // $FlowFixMe[unused-promise]
   Share.share(
     {
       title: 'Massive Scale',
@@ -80,7 +79,7 @@ const ShareMessageWithTitle = () => {
 };
 
 const SharedAction = () => {
-  const [shared, setShared] = React.useState<?string>();
+  const [shared, setShared] = React.useState();
 
   const sharedAction = async () => {
     try {

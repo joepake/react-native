@@ -8,15 +8,14 @@
  * @flow
  */
 
-import type {RNTesterModuleInfo} from './types/RNTesterTypes';
-import type {Node} from 'react';
-
-import RNTesterModuleContainer from './components/RNTesterModuleContainer';
-import SnapshotViewIOS from './examples/Snapshot/SnapshotViewIOS.ios';
-import RNTesterApp from './RNTesterAppShared';
-import RNTesterList from './utils/RNTesterList';
-import React from 'react';
 import {AppRegistry} from 'react-native';
+import React from 'react';
+
+import SnapshotViewIOS from './examples/Snapshot/SnapshotViewIOS.ios';
+import RNTesterModuleContainer from './components/RNTesterModuleContainer';
+import RNTesterList from './utils/RNTesterList';
+import RNTesterApp from './RNTesterAppShared';
+import type {RNTesterModuleInfo} from './types/RNTesterTypes';
 
 AppRegistry.registerComponent('SetPropertiesExampleApp', () =>
   require('./examples/SetPropertiesExample/SetPropertiesExampleApp'),
@@ -32,7 +31,7 @@ RNTesterList.Components.concat(RNTesterList.APIs).forEach(
     const ExampleModule = Example.module;
     if (ExampleModule.displayName) {
       class Snapshotter extends React.Component<{...}> {
-        render(): Node {
+        render() {
           return (
             <SnapshotViewIOS>
               <RNTesterModuleContainer

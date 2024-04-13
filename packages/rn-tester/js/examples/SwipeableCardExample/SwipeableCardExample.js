@@ -13,11 +13,11 @@ import type {RenderItemProps} from 'react-native/Libraries/Lists/VirtualizedList
 import * as React from 'react';
 import {
   Animated,
-  FlatList,
   PanResponder,
-  StyleSheet,
-  Text,
   View,
+  StyleSheet,
+  FlatList,
+  Text,
   useWindowDimensions,
 } from 'react-native';
 

@@ -8,27 +8,28 @@
  * @flow
  */
 
-import {useEffect, useRef, useState} from 'react';
-
 const React = require('react');
+
 const {
   Animated,
   Image,
-  Platform,
   StyleSheet,
   Text,
   TouchableHighlight,
-  TouchableNativeFeedback,
   TouchableOpacity,
+  Platform,
+  TouchableNativeFeedback,
   TouchableWithoutFeedback,
   View,
 } = require('react-native');
+
+import {useEffect, useRef, useState} from 'react';
 
 const forceTouchAvailable =
   (Platform.OS === 'ios' && Platform.constants.forceTouchAvailable) || false;
 
 class TouchableHighlightBox extends React.Component<{...}, $FlowFixMeState> {
-  state: any | {timesPressed: number} = {
+  state = {
     timesPressed: 0,
   };
 
@@ -38,7 +39,7 @@ class TouchableHighlightBox extends React.Component<{...}, $FlowFixMeState> {
     });
   };
 
-  render(): React.Node {
+  render() {
     let textLog = '';
     if (this.state.timesPressed > 1) {
       textLog = this.state.timesPressed + 'x TouchableHighlight onPress';
@@ -78,7 +79,7 @@ class TouchableWithoutFeedbackBox extends React.Component<
   {...},
   $FlowFixMeState,
 > {
-  state: any | {timesPressed: number} = {
+  state = {
     timesPressed: 0,
   };
 
@@ -88,7 +89,7 @@ class TouchableWithoutFeedbackBox extends React.Component<
     });
   };
 
-  render(): React.Node {
+  render() {
     let textLog = '';
     if (this.state.timesPressed > 1) {
       textLog = this.state.timesPressed + 'x TouchableWithoutFeedback onPress';
@@ -114,7 +115,7 @@ class TouchableWithoutFeedbackBox extends React.Component<
 }
 
 class TextOnPressBox extends React.Component<{...}, $FlowFixMeState> {
-  state: any | {timesPressed: number} = {
+  state = {
     timesPressed: 0,
   };
 
@@ -124,7 +125,7 @@ class TextOnPressBox extends React.Component<{...}, $FlowFixMeState> {
     });
   };
 
-  render(): React.Node {
+  render() {
     let textLog = '';
     if (this.state.timesPressed > 1) {
       textLog = this.state.timesPressed + 'x text onPress';
@@ -149,11 +150,11 @@ class TextOnPressBox extends React.Component<{...}, $FlowFixMeState> {
 }
 
 class TouchableFeedbackEvents extends React.Component<{...}, $FlowFixMeState> {
-  state: any | {eventLog: Array<string>} = {
+  state = {
     eventLog: [],
   };
 
-  render(): React.Node {
+  render() {
     return (
       <View testID="touchable_feedback_events">
         <View style={[styles.row, styles.centered]}>
@@ -189,11 +190,11 @@ class TouchableFeedbackEvents extends React.Component<{...}, $FlowFixMeState> {
 }
 
 class TouchableDelayEvents extends React.Component<{...}, $FlowFixMeState> {
-  state: any | {eventLog: Array<string>} = {
+  state = {
     eventLog: [],
   };
 
-  render(): React.Node {
+  render() {
     return (
       <View testID="touchable_delay_events">
         <View style={[styles.row, styles.centered]}>
@@ -230,17 +231,17 @@ class TouchableDelayEvents extends React.Component<{...}, $FlowFixMeState> {
 }
 
 class ForceTouchExample extends React.Component<{...}, $FlowFixMeState> {
-  state: any | {force: number} = {
+  state = {
     force: 0,
   };
 
-  _renderConsoleText = (): string => {
+  _renderConsoleText = () => {
     return forceTouchAvailable
       ? 'Force: ' + this.state.force.toFixed(3)
       : '3D Touch is not available on this device';
   };
 
-  render(): React.Node {
+  render() {
     return (
       <View testID="touchable_3dtouch_event">
         <View style={styles.forceTouchBox} testID="touchable_3dtouch_output">
@@ -264,7 +265,7 @@ class ForceTouchExample extends React.Component<{...}, $FlowFixMeState> {
 }
 
 class TouchableHitSlop extends React.Component<{...}, $FlowFixMeState> {
-  state: any | {timesPressed: number} = {
+  state = {
     timesPressed: 0,
   };
 
@@ -274,7 +275,7 @@ class TouchableHitSlop extends React.Component<{...}, $FlowFixMeState> {
     });
   };
 
-  render(): React.Node {
+  render() {
     let log = '';
     if (this.state.timesPressed > 1) {
       log = this.state.timesPressed + 'x onPress';
@@ -321,8 +322,8 @@ function TouchableNativeMethodChecker<
         {status == null
           ? 'Missing Ref!'
           : status === true
-            ? 'Native Methods Exist'
-            : 'Native Methods Missing!'}
+          ? 'Native Methods Exist'
+          : 'Native Methods Missing!'}
       </Text>
     </View>
   );
@@ -344,7 +345,7 @@ function TouchableNativeMethods() {
 }
 
 class TouchableDisabled extends React.Component<{...}> {
-  render(): React.Node {
+  render() {
     return (
       <View>
         <TouchableOpacity disabled={true} style={[styles.row, styles.block]}>
@@ -539,10 +540,9 @@ const TouchableTouchSoundDisabled = () => {
   );
 };
 
-// $FlowFixMe[missing-local-annot]
 function TouchableOnFocus<T: React.AbstractComponent<any, any>>() {
   const ref = useRef<?React.ElementRef<T> | {focus: Function}>(null);
-  const [isFocused, setIsFocused] = useState<string | boolean>(false);
+  const [isFocused, setIsFocused] = useState(false);
   const [focusStatus, setFocusStatus] = useState(
     'This touchable is not focused.',
   );

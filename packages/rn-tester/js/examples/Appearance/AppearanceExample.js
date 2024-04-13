@@ -8,43 +8,48 @@
  * @flow
  */
 
-import type {
-  AppearancePreferences,
-  ColorSchemeName,
-} from 'react-native/Libraries/Utilities/NativeAppearance';
-
-import {RNTesterThemeContext, themes} from '../../components/RNTesterTheme';
 import * as React from 'react';
-import {useEffect, useState} from 'react';
-import {Appearance, Button, Text, View, useColorScheme} from 'react-native';
+import {Appearance, Text, useColorScheme, View} from 'react-native';
+import type {AppearancePreferences} from 'react-native/Libraries/Utilities/NativeAppearance';
+import type {EventSubscription} from 'react-native/Libraries/vendor/emitter/EventEmitter';
+import {RNTesterThemeContext, themes} from '../../components/RNTesterTheme';
 
-function ColorSchemeSubscription() {
-  const [colorScheme, setScheme] = useState<?ColorSchemeName | string>(
-    Appearance.getColorScheme(),
-  );
+class ColorSchemeSubscription extends React.Component<
+  {...},
+  {colorScheme: ?string, ...},
+> {
+  _subscription: ?EventSubscription;
 
-  useEffect(() => {
-    const subscription = Appearance.addChangeListener(
+  state = {
+    colorScheme: Appearance.getColorScheme(),
+  };
+
+  componentDidMount() {
+    this._subscription = Appearance.addChangeListener(
       (preferences: AppearancePreferences) => {
-        const {colorScheme: scheme} = preferences;
-        setScheme(scheme);
+        const {colorScheme} = preferences;
+        this.setState({colorScheme});
       },
     );
+  }
 
-    return () => subscription?.remove();
-  }, [setScheme]);
+  componentWillUnmount() {
+    this._subscription?.remove();
+  }
 
-  return (
-    <RNTesterThemeContext.Consumer>
-      {theme => {
-        return (
-          <ThemedContainer>
-            <ThemedText>{colorScheme}</ThemedText>
-          </ThemedContainer>
-        );
-      }}
-    </RNTesterThemeContext.Consumer>
-  );
+  render() {
+    return (
+      <RNTesterThemeContext.Consumer>
+        {theme => {
+          return (
+            <ThemedContainer>
+              <ThemedText>{this.state.colorScheme}</ThemedText>
+            </ThemedContainer>
+          );
+        }}
+      </RNTesterThemeContext.Consumer>
+    );
+  }
 }
 
 const ThemedContainer = (props: {children: React.Node}) => (
@@ -64,7 +69,7 @@ const ThemedContainer = (props: {children: React.Node}) => (
   </RNTesterThemeContext.Consumer>
 );
 
-const ThemedText = (props: {children: React.Node | string}) => (
+const ThemedText = (props: {children: React.Node}) => (
   <RNTesterThemeContext.Consumer>
     {theme => {
       return <Text style={{color: theme.LabelColor}}>{props.children}</Text>;
@@ -96,72 +101,45 @@ const ColorShowcase = (props: {themeName: string}) => (
           <Text style={{fontWeight: '700', color: theme.LabelColor}}>
             {props.themeName}
           </Text>
-          {Object.keys(theme).map(
-            key =>
-              typeof theme[key] === 'string' && (
-                <View style={{flexDirection: 'row'}} key={key}>
-                  <View
-                    style={{
-                      width: 50,
-                      height: 50,
-                      paddingHorizontal: 8,
-                      paddingVertical: 2,
-                      backgroundColor: theme[key],
-                    }}
-                  />
-                  <View>
-                    <Text
-                      style={{
-                        paddingHorizontal: 16,
-                        paddingVertical: 2,
-                        color: theme.LabelColor,
-                        fontWeight: '600',
-                      }}>
-                      {key}
-                    </Text>
-                    <Text
-                      style={{
-                        paddingHorizontal: 16,
-                        paddingVertical: 2,
-                        color: theme.LabelColor,
-                      }}>
-                      {theme[key]}
-                    </Text>
-                  </View>
-                </View>
-              ),
-          )}
+          {Object.keys(theme).map(key => (
+            <View style={{flexDirection: 'row'}} key={key}>
+              <View
+                style={{
+                  width: 50,
+                  height: 50,
+                  paddingHorizontal: 8,
+                  paddingVertical: 2,
+                  backgroundColor: theme[key],
+                }}
+              />
+              <View>
+                <Text
+                  style={{
+                    paddingHorizontal: 16,
+                    paddingVertical: 2,
+                    color: theme.LabelColor,
+                    fontWeight: '600',
+                  }}>
+                  {key}
+                </Text>
+                <Text
+                  style={{
+                    paddingHorizontal: 16,
+                    paddingVertical: 2,
+                    color: theme.LabelColor,
+                  }}>
+                  {typeof theme[key] === 'string'
+                    ? theme[key]
+                    : JSON.stringify(theme[key])}
+                </Text>
+              </View>
+            </View>
+          ))}
         </View>
       );
     }}
   </RNTesterThemeContext.Consumer>
 );
-
-const ToggleNativeAppearance = () => {
-  const [nativeColorScheme, setNativeColorScheme] =
-    useState<ColorSchemeName | null>(null);
-  const colorScheme = useColorScheme();
-
-  useEffect(() => {
-    Appearance.setColorScheme(nativeColorScheme);
-  }, [nativeColorScheme]);
-
-  return (
-    <View>
-      <Text>Native colorScheme: {nativeColorScheme}</Text>
-      <Text>Current colorScheme: {colorScheme}</Text>
-      <Button
-        title="Set to light"
-        onPress={() => setNativeColorScheme('light')}
-      />
-      <Button
-        title="Set to dark"
-        onPress={() => setNativeColorScheme('dark')}
-      />
-      <Button title="Unset" onPress={() => setNativeColorScheme(null)} />
-    </View>
-  );
-};
 
 exports.title = 'Appearance';
 exports.category = 'UI';
@@ -240,13 +218,6 @@ exports.examples = [
           </RNTesterThemeContext.Provider>
         </View>
       );
-    },
-  },
-  {
-    title: 'Toggle native appearance',
-    description: 'Overwrite application-level appearance mode',
-    render(): React.Element<any> {
-      return <ToggleNativeAppearance />;
     },
   },
 ];

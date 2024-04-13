@@ -9,9 +9,8 @@
  */
 
 import type {TurboModule} from 'react-native/Libraries/TurboModule/RCTExport';
-import type {UnsafeObject} from 'react-native/Libraries/Types/CodegenTypes';
-
 import * as TurboModuleRegistry from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import type {UnsafeObject} from 'react-native/Libraries/Types/CodegenTypes';
 
 export type ScreenshotManagerOptions = UnsafeObject;
 

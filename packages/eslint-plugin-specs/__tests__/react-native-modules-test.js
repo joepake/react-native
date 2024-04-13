@@ -4,14 +4,15 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
+ * @emails react_native
  * @format
- * @oncall react_native
  */
 
 'use strict';
 
-const rule = require('../react-native-modules');
 const ESLintTester = require('./eslint-tester.js');
+
+const rule = require('../react-native-modules');
 
 const NATIVE_MODULES_DIR = __dirname;
 

@@ -12,9 +12,9 @@
 
 import type {SchemaType} from '../../CodegenSchema';
 
-const {getModules} = require('./Utils');
-
 type FilesOutput = Map<string, string>;
+
+const {getModules} = require('./Utils');
 
 const ModuleClassDeclarationTemplate = ({
   hasteModuleName,
@@ -49,14 +49,59 @@ const HeaderFileTemplate = ({
 #include <ReactCommon/TurboModule.h>
 #include <jsi/jsi.h>
 
-namespace facebook::react {
+namespace facebook {
+namespace react {
 
 ${modules}
 
 JSI_EXPORT
 std::shared_ptr<TurboModule> ${libraryName}_ModuleProvider(const std::string &moduleName, const JavaTurboModule::InitParams &params);
 
-} // namespace facebook::react
+} // namespace react
+} // namespace facebook
+`;
+};
+
+// Note: this Android.mk template includes dependencies for both NativeModule and components.
+const AndroidMkTemplate = ({libraryName}: $ReadOnly<{libraryName: string}>) => {
+  return `# Copyright (c) Meta Platforms, Inc. and affiliates.
+#
+# This source code is licensed under the MIT license found in the
+# LICENSE file in the root directory of this source tree.
+
+LOCAL_PATH := $(call my-dir)
+
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := react_codegen_${libraryName}
+
+LOCAL_C_INCLUDES := $(LOCAL_PATH)
+
+LOCAL_SRC_FILES := $(wildcard $(LOCAL_PATH)/*.cpp) $(wildcard $(LOCAL_PATH)/react/renderer/components/${libraryName}/*.cpp)
+LOCAL_SRC_FILES := $(subst $(LOCAL_PATH)/,,$(LOCAL_SRC_FILES))
+
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH) $(LOCAL_PATH)/react/renderer/components/${libraryName}
+
+LOCAL_SHARED_LIBRARIES := libfbjni \
+  libfolly_runtime \
+  libglog \
+  libjsi \
+  libreact_codegen_rncore \
+  libreact_debug \
+  libreact_nativemodule_core \
+  libreact_render_core \
+  libreact_render_debug \
+  libreact_render_graphics \
+  librrc_view \
+  libturbomodulejsijni \
+  libyoga
+
+LOCAL_CFLAGS := \\
+  -DLOG_TAG=\\"ReactNative\\"
+
+LOCAL_CFLAGS += -fexceptions -frtti -std=c++17 -Wall
+
+include $(BUILD_SHARED_LIBRARY)
 `;
 };
 
@@ -91,14 +136,9 @@ target_link_libraries(
   ${libraryName !== 'rncore' ? 'react_codegen_rncore' : ''}
   react_debug
   react_nativemodule_core
-  react_render_componentregistry
   react_render_core
   react_render_debug
   react_render_graphics
-  react_render_imagemanager
-  react_render_mapbuffer
-  react_utils
-  rrc_image
   rrc_view
   turbomodulejsijni
   yoga
@@ -110,7 +150,7 @@ target_compile_options(
   -DLOG_TAG=\\"ReactNative\\"
   -fexceptions
   -frtti
-  -std=c++20
+  -std=c++17
   -Wall
 )
 `;
@@ -122,7 +162,6 @@ module.exports = {
     schema: SchemaType,
     packageName?: string,
     assumeNonnull: boolean = false,
-    headerPrefix?: string,
   ): FilesOutput {
     const nativeModules = getModules(schema);
     const modules = Object.keys(nativeModules)
@@ -144,6 +183,12 @@ module.exports = {
     });
     return new Map([
       [`jni/${fileName}`, replacedTemplate],
+      [
+        'jni/Android.mk',
+        AndroidMkTemplate({
+          libraryName: libraryName,
+        }),
+      ],
       ['jni/CMakeLists.txt', CMakeListsTemplate({libraryName: libraryName})],
     ]);
   },

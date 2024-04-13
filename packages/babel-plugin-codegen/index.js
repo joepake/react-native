@@ -9,49 +9,23 @@
 
 'use strict';
 
-let FlowParser, TypeScriptParser, RNCodegen;
+let flow, RNCodegen;
 
 const {basename} = require('path');
 
 try {
-  FlowParser =
-    require('@react-native/codegen/src/parsers/flow/parser').FlowParser;
-  TypeScriptParser =
-    require('@react-native/codegen/src/parsers/typescript/parser').TypeScriptParser;
-  RNCodegen = require('@react-native/codegen/src/generators/RNCodegen');
+  flow = require('react-native-codegen/src/parsers/flow');
+  RNCodegen = require('react-native-codegen/src/generators/RNCodegen');
 } catch (e) {
   // Fallback to lib when source doesn't exit (e.g. when installed as a dev dependency)
-  FlowParser =
-    require('@react-native/codegen/lib/parsers/flow/parser').FlowParser;
-  TypeScriptParser =
-    require('@react-native/codegen/lib/parsers/typescript/parser').TypeScriptParser;
-  RNCodegen = require('@react-native/codegen/lib/generators/RNCodegen');
-}
-
-const flowParser = new FlowParser();
-const typeScriptParser = new TypeScriptParser();
-
-function parseFile(filename, code) {
-  if (filename.endsWith('js')) {
-    return flowParser.parseString(code);
-  }
-
-  if (filename.endsWith('ts')) {
-    return typeScriptParser.parseString(code);
-  }
-
-  throw new Error(
-    `Unable to parse file '${filename}'. Unsupported filename extension.`,
-  );
+  flow = require('react-native-codegen/lib/parsers/flow');
+  RNCodegen = require('react-native-codegen/lib/generators/RNCodegen');
 }
 
 function generateViewConfig(filename, code) {
-  const schema = parseFile(filename, code);
+  const schema = flow.parseString(code);
 
-  const libraryName = basename(filename).replace(
-    /NativeComponent\.(js|ts)$/,
-    '',
-  );
+  const libraryName = basename(filename).replace(/NativeComponent\.js$/, '');
   return RNCodegen.generateViewConfig({
     schema,
     libraryName,
@@ -76,16 +50,7 @@ function isCodegenDeclaration(declaration) {
   ) {
     return true;
   } else if (
-    (declaration.type === 'TypeCastExpression' ||
-      declaration.type === 'AsExpression') &&
-    declaration.expression &&
-    declaration.expression.callee &&
-    declaration.expression.callee.name &&
-    declaration.expression.callee.name === 'codegenNativeComponent'
-  ) {
-    return true;
-  } else if (
-    declaration.type === 'TSAsExpression' &&
+    declaration.type === 'TypeCastExpression' &&
     declaration.expression &&
     declaration.expression.callee &&
     declaration.expression.callee.name &&

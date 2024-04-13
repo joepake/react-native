@@ -9,11 +9,10 @@
  */
 
 'use strict';
-import type {ComponentShape, PropTypeAnnotation} from '../../CodegenSchema';
-import type {SchemaType} from '../../CodegenSchema';
+import type {PropTypeAnnotation, ComponentShape} from '../../CodegenSchema';
 
-const {toSafeCppString} = require('../Utils');
-const {getImports} = require('./CppHelpers');
+import type {SchemaType} from '../../CodegenSchema';
+const {getImports, toSafeCppString} = require('./CppHelpers');
 
 type FilesOutput = Map<string, string>;
 type PropValueType = string | number | boolean;
@@ -152,7 +151,7 @@ function generateTestsString(name: string, component: ComponentShape) {
     });
   }
 
-  const testCases = component.props.reduce((cases: Array<TestCase>, prop) => {
+  const testCases = component.props.reduce((cases, prop) => {
     return cases.concat(getTestCasesForProp(prop.name, prop.typeAnnotation));
   }, []);
 
@@ -171,7 +170,6 @@ module.exports = {
     schema: SchemaType,
     packageName?: string,
     assumeNonnull: boolean = false,
-    headerPrefix?: string,
   ): FilesOutput {
     const fileName = 'Tests.cpp';
     const allImports = new Set([
