@@ -110,13 +110,6 @@
         },
         {
           "group": "com.squareup.okhttp3",
-          "module": "okhttp-urlconnection",
-          "version": {
-            "requires": "4.9.2"
-          }
-        },
-        {
-          "group": "com.squareup.okhttp3",
           "module": "okhttp",
           "version": {
             "requires": "4.9.2"
@@ -153,6 +146,10 @@
           "sha256": "a1fd0d132215078bb4a67df42a5666cc6aedc6dc62bbca7c7cb11590380d5380",
           "sha1": "b3139a8ce53f5fd46ce34a33f312ce7d953c7793",
           "md5": "be41181d890da230fa7158785355a790"
+        },
+        {
+          "name": "okhttp-urlconnection.aar",
+          "url": "okhttp-urlconnection.aar"
         }
       ]
     },
@@ -248,13 +245,6 @@
           "module": "jsr305",
           "version": {
             "requires": "3.0.2"
-          }
-        },
-        {
-          "group": "com.squareup.okhttp3",
-          "module": "okhttp-urlconnection",
-          "version": {
-            "requires": "4.9.2"
           }
         },
         {
@@ -415,13 +405,6 @@
         },
         {
           "group": "com.squareup.okhttp3",
-          "module": "okhttp-urlconnection",
-          "version": {
-            "requires": "4.9.2"
-          }
-        },
-        {
-          "group": "com.squareup.okhttp3",
           "module": "okhttp",
           "version": {
             "requires": "4.9.2"
@@ -458,6 +441,10 @@
           "sha256": "3d1ca868f61ce77096444b0e2383def76f76b5b06c101a30ffdd830ee72af83d",
           "sha1": "2d83c967248ff5e2cd115a3cdfc9645bb86e4cf7",
           "md5": "552417cf547f4d2f2450436d9f049de3"
+        },
+        {
+          "name": "okhttp-urlconnection.aar",
+          "url": "okhttp-urlconnection.aar"
         }
       ]
     },
@@ -557,13 +544,6 @@
         },
         {
           "group": "com.squareup.okhttp3",
-          "module": "okhttp-urlconnection",
-          "version": {
-            "requires": "4.9.2"
-          }
-        },
-        {
-          "group": "com.squareup.okhttp3",
           "module": "okhttp",
           "version": {
             "requires": "4.9.2"
@@ -600,6 +580,10 @@
           "sha256": "3d1ca868f61ce77096444b0e2383def76f76b5b06c101a30ffdd830ee72af83d",
           "sha1": "2d83c967248ff5e2cd115a3cdfc9645bb86e4cf7",
           "md5": "552417cf547f4d2f2450436d9f049de3"
+        },
+        {
+          "name": "okhttp-urlconnection.aar",
+          "url": "okhttp-urlconnection.aar"
         }
       ]
     },
@@ -621,6 +605,10 @@
           "sha256": "6209fe4863d176d92b73cc99592b3669403b8dc5424d1f4ef7c3eb62d71824af",
           "sha1": "58dd008be7c42f208201d5104c6c509134253d7c",
           "md5": "e900372f17cf6a1f91dc0fae7d5ed890"
+        },
+        {
+          "name": "okhttp-urlconnection.aar",
+          "url": "okhttp-urlconnection.aar"
         }
       ]
     }
