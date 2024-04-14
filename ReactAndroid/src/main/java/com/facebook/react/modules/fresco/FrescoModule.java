@@ -162,9 +162,9 @@ public class FrescoModule extends ReactContextBaseJavaModule
 
     // make sure to forward cookies for any requests via the okHttpClient
     // so that image requests to endpoints that use cookies still work
-    CookieJarContainer container = (CookieJarContainer) client.cookieJar();
-    ForwardingCookieHandler handler = new ForwardingCookieHandler(context);
-    container.setCookieJar(new JavaNetCookieJar(handler));
+    // CookieJarContainer container = (CookieJarContainer) client.cookieJar();
+    // ForwardingCookieHandler handler = new ForwardingCookieHandler(context);
+    // container.setCookieJar(new JavaNetCookieJar(handler));
 
     return OkHttpImagePipelineConfigFactory.newBuilder(context.getApplicationContext(), client)
         .setNetworkFetcher(new ReactOkHttpNetworkFetcher(client))
