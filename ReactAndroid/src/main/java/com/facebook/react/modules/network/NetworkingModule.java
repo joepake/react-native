@@ -38,7 +38,6 @@ import okhttp3.Callback;
 import okhttp3.CookieJar;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
-import okhttp3.JavaNetCookieJar;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -125,7 +124,7 @@ public final class NetworkingModule extends NativeNetworkingAndroidSpec {
     }
     mClient = client;
     mCookieHandler = new ForwardingCookieHandler(reactContext);
-    mCookieJarContainer = (CookieJarContainer) mClient.cookieJar();
+    // mCookieJarContainer = (CookieJarContainer) mClient.cookieJar();
     mShuttingDown = false;
     mDefaultUserAgent = defaultUserAgent;
     mRequestIds = new HashSet<>();
@@ -182,7 +181,7 @@ public final class NetworkingModule extends NativeNetworkingAndroidSpec {
 
   @Override
   public void initialize() {
-    mCookieJarContainer.setCookieJar(new JavaNetCookieJar(mCookieHandler));
+    // mCookieJarContainer.setCookieJar(null);
   }
 
   @Override
@@ -196,7 +195,7 @@ public final class NetworkingModule extends NativeNetworkingAndroidSpec {
     cancelAllRequests();
 
     mCookieHandler.destroy();
-    mCookieJarContainer.removeCookieJar();
+    // mCookieJarContainer.removeCookieJar();
 
     mRequestBodyHandlers.clear();
     mResponseHandlers.clear();
